@@ -8,10 +8,21 @@ import org.jetbrains.dokka.plugability.DokkaContext
 import org.jetbrains.dokka.plugability.DokkaPlugin
 import org.jetbrains.dokka.transformers.documentation.PreMergeDocumentableTransformer
 import org.jetbrains.dokka.transformers.sources.SourceToDocumentableTranslator
+import kotlin.reflect.*
 
 data class SourceSetWrapper(val sourceSet: DokkaConfiguration.DokkaSourceSet) {
     fun toSet(): Set<DokkaConfiguration.DokkaSourceSet> = setOf(sourceSet)
     fun <T> asMap(value: T): Map<DokkaConfiguration.DokkaSourceSet, T> = mapOf(sourceSet to value)
+}
+
+class ClassBuilder<T: Any>(jclass: Class<T>){
+   val kClass = jclass.kotlin
+   val constructor = kClass.constructors.first() // class must have a constructor
+
+   val allParameters = constructor.valueParameters()
+
+    @kotlin.ExperimentalStdlibApi
+   fun ktypeToJavaType(p: KType): String = p.javaType.getTypeName()
 }
 
 abstract class JavaDokkaPlugin : DokkaPlugin() {
