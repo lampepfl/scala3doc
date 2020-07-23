@@ -1,5 +1,13 @@
 package tests
 
+/** * AN IMPORTANT TEST CLASS
+  *
+  * This is an *important* test class.
+  *
+  * @author Gal Anonim
+  * @version 1.0.0
+  * @result A class doesn't actually have a result.
+  */
 class A
 class B extends A
 class C 
