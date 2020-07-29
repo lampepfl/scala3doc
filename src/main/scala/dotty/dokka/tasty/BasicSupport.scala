@@ -49,5 +49,5 @@ trait BasicSupport:
         new DocumentableSource:
           override def getPath = path
       )          
-  
+
   private val emptyDRI =  DRI.Companion.getTopLevel
