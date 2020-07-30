@@ -65,7 +65,7 @@ trait BasicSupport:
             Map.empty.asJava
 
     def source(using ctx: Context) =
-      val path = sym.pos.sourceFile.jpath.toString
+      val path = try sym.pos.sourceFile.jpath.toString catch case _ => "<no-source>"
       sourceSet.asMap(
         new DocumentableSource:
           override def getPath = path

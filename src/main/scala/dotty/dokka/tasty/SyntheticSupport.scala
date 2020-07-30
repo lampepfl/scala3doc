@@ -6,8 +6,12 @@ trait SyntheticsSupport:
   import reflect._
 
   def isValidPos(pos: Position) = 
-    val a = (pos.exists, pos.start, pos.end)
-    pos.exists && pos.start != pos.end
+    try
+      val a = (pos.exists, pos.start, pos.end)
+      pos.exists && pos.start != pos.end
+    catch 
+      case scala.util.control.NonFatal(_) =>
+        false  
 
   def constructorWithoutParamLists(c: ClassDef): Boolean =
     !isValidPos(c.constructor.pos)  || {

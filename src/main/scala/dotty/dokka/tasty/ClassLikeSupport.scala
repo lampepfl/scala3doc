@@ -77,6 +77,11 @@ trait ClassLikeSupport:
     val paramLists = if emptyParamsList then Nil else method.paramss
     val genericTypes = if (methodSymbol.isClassConstructor) Nil else method.typeParams
    
+    val retType = 
+      try method.returnTpt.dokkaType
+      catch case _ => empty(methodSymbol)
+
+
     new DFunction(
       methodSymbol.dri,
       if methodSymbol.isClassConstructor then "this" else methodSymbol.name,
@@ -86,7 +91,7 @@ trait ClassLikeSupport:
       /*expectPresentInSet =*/ null, // unused
       /*sources =*/ methodSymbol.source,
       /*visibility =*/ sourceSet.asMap(methodSymbol.getVisibility()),
-      /*type =*/ method.returnTpt.dokkaType,
+      /*type =*/ retType, // method.returnTpt.dokkaType,
       /*generics =*/ genericTypes.map(parseTypeArgument).asJava, 
       /*receiver =*/ null, // Not used
       /*modifier =*/ sourceSet.asMap(methodSymbol.getModifier()),
