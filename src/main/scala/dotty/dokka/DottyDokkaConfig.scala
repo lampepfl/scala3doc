@@ -7,9 +7,8 @@ import java.util.{ List => JList, Map => JMap}
 import collection.JavaConverters._
 import dotty.tastydoc.representations._
 
-case class DottyDokkaConfig(docConfiguration: DocConfiguration) extends DokkaConfiguration:
-  var _outputDir: String = new File("output").getAbsolutePath
-  override def getOutputDir: String = _outputDir
+case class DottyDokkaConfig(docConfiguration: DocConfiguration, output: File = new File("output")) extends DokkaConfiguration:
+  override def getOutputDir: String = output.getAbsolutePath
   override def getCacheRoot: String = null
   override def getOfflineMode: Boolean = false
   override def getFailOnWarning: Boolean = false

@@ -1,8 +1,9 @@
 val dottyVersion = "0.26.0-RC1"
+val dokkaVersion = "1.4.0-M3-dev-81"
 
-libraryDependencies += "org.jetbrains.dokka" % "dokka-base" % "1.4.0-M3-dev-81"
-libraryDependencies += "org.jetbrains.dokka" % "dokka-core" % "1.4.0-M3-dev-81"
-libraryDependencies += "org.jetbrains.dokka" % "dokka-test-api" % "1.4.0-M3-dev-81"
+libraryDependencies += "org.jetbrains.dokka" % "dokka-base" % dokkaVersion
+libraryDependencies += "org.jetbrains.dokka" % "dokka-core" % dokkaVersion
+libraryDependencies += "org.jetbrains.dokka" % "dokka-test-api" % dokkaVersion
 libraryDependencies += "ch.epfl.lamp" %% "dotty-tastydoc" % dottyVersion
 libraryDependencies += "ch.epfl.lamp" %% "dotty-compiler" % dottyVersion
 libraryDependencies += "ch.epfl.lamp" %% "dotty-library" % dottyVersion
@@ -37,8 +38,11 @@ buildDokkaApi := {
   dokkaJavaApiJar
 }
 
-val generateExapleDocumentation = taskKey[Unit]("Generate example documentation")
-generateExapleDocumentation := run.in(Compile).toTask("").value // TODO 
+val generateSelfDocumentation = inputKey[Unit]("Generate example documentation")
+generateSelfDocumentation := {
+  file("output").delete()   
+  run.in(Compile).fullInput(" target/scala-0.26/classes").evaluated // TODO #35 proper sbt integration
+}
 
 unmanagedJars in Compile += dokkaJavaApiJar
 

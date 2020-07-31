@@ -52,9 +52,9 @@ abstract class DottyAbstractCoreTest extends AbstractCoreTest:
             DocConfiguration(
                 tastyFiles = tastyFiles,
                 classpath = System.getProperty("java.class.path")
-            )
+            ),
+            output = getTempDir().getRoot
         )
-        config._outputDir = getTempDir().getRoot.toPath.toAbsolutePath.toString
         DokkaTestGenerator(
             config,
             new TestLogger(DokkaConsoleLogger.INSTANCE),
