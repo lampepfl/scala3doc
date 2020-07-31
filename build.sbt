@@ -7,6 +7,7 @@ libraryDependencies += "org.jetbrains.dokka" % "dokka-test-api" % dokkaVersion
 libraryDependencies += "ch.epfl.lamp" %% "dotty-tastydoc" % dottyVersion
 libraryDependencies += "ch.epfl.lamp" %% "dotty-compiler" % dottyVersion
 libraryDependencies += "ch.epfl.lamp" %% "dotty-library" % dottyVersion
+libraryDependencies += "org.scala-sbt" % "io_2.13" % "1.3.4"
 
 resolvers += Resolver.jcenterRepo
 
@@ -40,8 +41,7 @@ buildDokkaApi := {
 
 val generateSelfDocumentation = inputKey[Unit]("Generate example documentation")
 generateSelfDocumentation := {
-  file("output").delete()   
-  run.in(Compile).fullInput(" target/scala-0.26/classes").evaluated // TODO #35 proper sbt integration
+  run.in(Compile).fullInput(" output/self target/scala-0.26/classes").evaluated // TODO #35 proper sbt integration
 }
 
 unmanagedJars in Compile += dokkaJavaApiJar
@@ -55,3 +55,19 @@ fork.in(test) := true
 Test / parallelExecution := false
 
 scalacOptions in Compile += "-language:implicitConversions"
+
+// TODO #35 proper sbt integration
+val generateDottyLibDocumentation = taskKey[Unit]("Generate documentation for dotty lib")
+generateDottyLibDocumentation :=  Def.taskDyn {
+  val dotttyLib = fullClasspath.in(Compile).value.find{ a =>
+    val info = a.get(moduleID.key)
+    info.nonEmpty && 
+     info.get.organization == "ch.epfl.lamp" &&
+     info.get.name.startsWith("dotty-library")
+  }
+  if (dotttyLib.isEmpty) Def.task {
+    streams.value.log.error("Dotty lib wasn't found")
+  } else Def.task {
+    run.in(Compile).toTask(s" output/stdLib ${dotttyLib.get.data}").value
+  } 
+}.value
