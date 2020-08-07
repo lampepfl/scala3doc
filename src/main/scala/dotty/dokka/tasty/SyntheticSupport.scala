@@ -34,3 +34,13 @@ trait SyntheticsSupport:
     val sym = rsym.asInstanceOf[dotc.core.Symbols.Symbol]
     sym.is(dotc.core.Flags.Extension)
   }
+
+  object MatchTypeCase:
+    def unapply(tpe: Type): Option[(TypeOrBounds, TypeOrBounds)] = 
+      tpe match
+        case AppliedType(t, Seq(from, to)) if t == MatchCaseType =>
+            Some((from, to))
+        case TypeLambda(paramNames, paramTypes, AppliedType(t, Seq(from, to))) if t == MatchCaseType =>
+            Some((from, to))
+        case _ =>
+          None    
