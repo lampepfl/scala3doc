@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>index</title>
+    <script>var pathToRoot = "";</script>
+  </head>
+  <body><h1>Dotty-dokka</h1>
+<p><strong>Documentation tool for Scala 3</strong></p>
+<p>We are using <a href="https://github.com/lampepfl/dotty/blob/master/tasty/src/dotty/tools/tasty/TastyFormat.scala">TASTY</a> to generate documentation. We aim to has all known and loved feature from scaladoc as well as new feature such as :</p>
+<ul>
+<li>integrated documentation and API</li>
+<li>has option for basic pluggablity</li>
+<li>and much more</li>
+</ul>
+<p><strong>Yes, this page was generated using dotty-dokka</strong></p>
+<h2>Getting started</h2>
+<p>For now the recommended way to try out our project would be:</p>
+<ul>
+<li>
+<p>Clone our <a href="https://github.com/Virtuslab/dotty-dokka">repository</a></p>
+</li>
+<li>
+<p>Run <code>sbt main -o &lt;output&gt; -t &lt;tasty-files&gt; -cp &lt;classpath&gt;</code> where</p>
+<ul>
+<li><code>&lt;output&gt;</code>: location where documentation should be created</li>
+<li><code>&lt;tasty-files&gt;</code>: is list of dirs or jars that contains tasty files that should be documented</li>
+<li><code>&lt;classpath&gt;</code>: classpath that was used to generate tasty files</li>
+</ul>
+<p>We also support <code>-d &lt;documentation&gt;</code> argument to provide static documentation. You can find more about that feature <a href="main/static-page.html">here</a>.</p>
+</li>
+</ul>
+</body>
+</html>
+
