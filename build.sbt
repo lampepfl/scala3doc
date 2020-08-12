@@ -43,7 +43,7 @@ buildDokkaApi := {
 
 val generateSelfDocumentation = inputKey[Unit]("Generate example documentation")
 generateSelfDocumentation := {
-  run.in(Compile).fullInput(" -o output/self -t target/scala-0.26/classes -d documentation").evaluated // TODO #35 proper sbt integration
+  run.in(Compile).fullInput(" -o output/self -t target/scala-0.26/classes -d documentation -n dotty-dokka").evaluated // TODO #35 proper sbt integration
 }
 
 unmanagedJars in Compile += dokkaJavaApiJar

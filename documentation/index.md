@@ -10,7 +10,7 @@ We are using [TASTY](https://github.com/lampepfl/dotty/blob/master/tasty/src/dot
 
 **Yes, this page was generated using dotty-dokka**
 
-You can learn more from out [documentation](main/index.html).
+You can learn more from out [documentation](dotty-dokka/index.html).
 
 ## Getting started
 

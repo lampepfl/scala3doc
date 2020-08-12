@@ -28,6 +28,7 @@ abstract class DottyAbstractCoreTest extends AbstractCoreTest:
         folder
 
     private def args = Args(
+        name = "test",
         tastyRoots = Nil ,
         classpath =  System.getProperty("java.class.path"),
         None,
