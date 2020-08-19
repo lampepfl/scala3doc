@@ -589,6 +589,8 @@ $dokka.location:tests.signatureTestSource/SignatureTestClass/primitives/#/Pointi
 $dokka.location:tests.signatureTestSource/SignatureTestClass/simple/#/PointingToDeclaration/tests.signatureTestSource.SignatureTestClass.simple/tests.signatureTestSource.B/[]main/tests.signatureTestSource/-signature-test-class/simple.html
 $dokka.location:tests.signatureTestSource/SignatureTestClass/strings/#/PointingToDeclaration/tests.signatureTestSource.SignatureTestClass.strings/java.lang.String/[java.lang.String]main/tests.signatureTestSource/-signature-test-class/strings.html
 $dokka.location:tests.signatureTestSource/SignatureTestClass/vararg/#/PointingToDeclaration/tests.signatureTestSource.SignatureTestClass.vararg/tests.signatureTestSource.C/[scala.collection.immutable.Seq]main/tests.signatureTestSource/-signature-test-class/vararg.html
+$dokka.location:tests.structuralTypes/Record///PointingToDeclaration/tests.structuralTypes.Record//[]main/tests.structuralTypes/-record/index.html
+$dokka.location:tests.structuralTypes/Record/selectDynamic/#/PointingToDeclaration/tests.structuralTypes.Record.selectDynamic/java.lang.Object/[java.lang.String]main/tests.structuralTypes/-record/select-dynamic.html
 $dokka.location:tests.traitSignatures/A///PointingToDeclaration/tests.traitSignatures.A//[]main/tests.traitSignatures/-a/index.html
 $dokka.location:tests.traitSignatures/B///PointingToDeclaration/tests.traitSignatures.B//[]main/tests.traitSignatures/-b/index.html
 $dokka.location:tests.traitSignatures/C///PointingToDeclaration/tests.traitSignatures.C//[]main/tests.traitSignatures/-c/index.html
@@ -651,6 +653,7 @@ tests.objectSignatures
 tests.packageObjectSymbolSignatures
 tests.packageSymbolSignatures
 tests.signatureTestSource
+tests.structuralTypes
 tests.traitSignatures
 tests.typesSignatures
 
