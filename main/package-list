@@ -237,6 +237,7 @@ $dokka.location:dotty.dokka.tasty/SyntheticsSupport/constructorWithoutParamLists
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/getExtendedSymbol/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.getExtendedSymbol/scala.Option/[java.lang.Object]main/dotty.dokka/tasty/-synthetics-support/get-extended-symbol.html
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/hackIsExtension/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.hackIsExtension/scala.Boolean/[scala.tasty.Reflection/java.lang.Object]main/dotty.dokka/tasty/-synthetics-support/hack-is-extension.html
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/hackIsLeftAssoc/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.hackIsLeftAssoc/scala.Boolean/[java.lang.Object]main/dotty.dokka/tasty/-synthetics-support/hack-is-left-assoc.html
+$dokka.location:dotty.dokka.tasty/SyntheticsSupport/hackIsOpaque/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.hackIsOpaque/scala.Boolean/[scala.tasty.Reflection/java.lang.Object]main/dotty.dokka/tasty/-synthetics-support/hack-is-opaque.html
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/isExtensionMethod/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.isExtensionMethod/scala.Boolean/[java.lang.Object]main/dotty.dokka/tasty/-synthetics-support/is-extension-method.html
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/isSyntheticField/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.isSyntheticField/scala.Boolean/[java.lang.Object/java.lang.Object]main/dotty.dokka/tasty/-synthetics-support/is-synthetic-field.html
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/isSyntheticFunc/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.isSyntheticFunc/scala.Boolean/[java.lang.Object]main/dotty.dokka/tasty/-synthetics-support/is-synthetic-func.html
@@ -586,6 +587,7 @@ $dokka.location:tests.objectSignatures/A/method3/#/PointingToDeclaration/tests.o
 $dokka.location:tests.objectSignatures/A2$///PointingToDeclaration/tests.objectSignatures.A2$//[]main/tests/objectSignatures/-a2/index.html
 $dokka.location:tests.objectSignatures/Base$///PointingToDeclaration/tests.objectSignatures.Base$//[]main/tests/objectSignatures/-base/index.html
 $dokka.location:tests.objectSignatures/C///PointingToDeclaration/tests.objectSignatures.C//[]main/tests/objectSignatures/-c/index.html
+$dokka.location:tests.opaqueTypes////PointingToDeclaration/main/tests/opaqueTypes.html
 $dokka.location:tests.packageObjectSymbolSignatures////PointingToDeclaration/main/tests/packageObjectSymbolSignatures/index.html
 $dokka.location:tests.packageObjectSymbolSignatures/package$/method1/#/PointingToDeclaration/tests.packageObjectSymbolSignatures.package$.method1/scala.Int/[]main/tests/packageObjectSymbolSignatures/method1.html
 $dokka.location:tests.packageObjectSymbolSignatures/package$/method2/#/PointingToDeclaration/tests.packageObjectSymbolSignatures.package$.method2/java.lang.String/[]main/tests/packageObjectSymbolSignatures/method2.html
@@ -675,6 +677,7 @@ methodsAndConstructors
 modifiersSignatureTestSource
 nested
 objectSignatures
+opaqueTypes
 packageObjectSymbolSignatures
 packageSymbolSignatures
 signatureTestSource
