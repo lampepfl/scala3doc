@@ -4,6 +4,7 @@ $dokka.location:dotty.dokka.tasty.comments.wiki////PointingToDeclaration/main/d
 $dokka.location:dotty.dokka.tasty.comments.wiki/Block///PointingToDeclaration/dotty.dokka.tasty.comments.wiki.Block//[]main/dotty.dokka/tasty/comments/wiki/-block/index.html
 $dokka.location:dotty.dokka.tasty.comments.wiki/Body///PointingToDeclaration/dotty.dokka.tasty.comments.wiki.Body//[]main/dotty.dokka/tasty/comments/wiki/-body/index.html
 $dokka.location:dotty.dokka.tasty.comments.wiki/Bold///PointingToDeclaration/dotty.dokka.tasty.comments.wiki.Bold//[]main/dotty.dokka/tasty/comments/wiki/-bold/index.html
+$dokka.location:dotty.dokka.tasty.comments.wiki/Chain$///PointingToDeclaration/dotty.dokka.tasty.comments.wiki.Chain$//[]main/dotty.dokka/tasty/comments/wiki/-chain$/index.html
 $dokka.location:dotty.dokka.tasty.comments.wiki/Chain///PointingToDeclaration/dotty.dokka.tasty.comments.wiki.Chain//[]main/dotty.dokka/tasty/comments/wiki/-chain/index.html
 $dokka.location:dotty.dokka.tasty.comments.wiki/CharReader///PointingToDeclaration/dotty.dokka.tasty.comments.wiki.CharReader//[]main/dotty.dokka/tasty/comments/wiki/-char-reader/index.html
 $dokka.location:dotty.dokka.tasty.comments.wiki/CharReader/char/#/PointingToDeclaration/dotty.dokka.tasty.comments.wiki.CharReader.char//[]main/dotty.dokka/tasty/comments/wiki/-char-reader/char.html
@@ -42,6 +43,7 @@ $dokka.location:dotty.dokka.tasty.comments.wiki/HtmlTag///PointingToDeclaration/
 $dokka.location:dotty.dokka.tasty.comments.wiki/HtmlTag/canClose/#/PointingToDeclaration/dotty.dokka.tasty.comments.wiki.HtmlTag.canClose/scala.Boolean/[dotty.dokka.tasty.comments.wiki.HtmlTag]main/dotty.dokka/tasty/comments/wiki/-html-tag/can-close.html
 $dokka.location:dotty.dokka.tasty.comments.wiki/HtmlTag/close/#/PointingToDeclaration/dotty.dokka.tasty.comments.wiki.HtmlTag.close//[]main/dotty.dokka/tasty/comments/wiki/-html-tag/close.html
 $dokka.location:dotty.dokka.tasty.comments.wiki/Inline///PointingToDeclaration/dotty.dokka.tasty.comments.wiki.Inline//[]main/dotty.dokka/tasty/comments/wiki/-inline/index.html
+$dokka.location:dotty.dokka.tasty.comments.wiki/Inline/isEmpty/#/PointingToDeclaration/dotty.dokka.tasty.comments.wiki.Inline.isEmpty//[]main/dotty.dokka/tasty/comments/wiki/-inline/is-empty.html
 $dokka.location:dotty.dokka.tasty.comments.wiki/Italic///PointingToDeclaration/dotty.dokka.tasty.comments.wiki.Italic//[]main/dotty.dokka/tasty/comments/wiki/-italic/index.html
 $dokka.location:dotty.dokka.tasty.comments.wiki/Link///PointingToDeclaration/dotty.dokka.tasty.comments.wiki.Link//[]main/dotty.dokka/tasty/comments/wiki/-link/index.html
 $dokka.location:dotty.dokka.tasty.comments.wiki/LinkTo///PointingToDeclaration/dotty.dokka.tasty.comments.wiki.LinkTo//[]main/dotty.dokka/tasty/comments/wiki/-link-to/index.html
