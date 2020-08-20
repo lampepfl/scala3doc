@@ -261,6 +261,10 @@ $dokka.location:dotty.dokka.tasty/TypesSupport/link/#/PointingToDeclaration/dott
 $dokka.location:dotty.dokka.tasty/TypesSupport/text/#/PointingToDeclaration/dotty.dokka.tasty.TypesSupport.text/org.jetbrains.dokka.model.Projection/[java.lang.String]main/dotty.dokka/tasty/-types-support/text.html
 $dokka.location:dotty.dokka.tasty/TypesSupport/texts/#/PointingToDeclaration/dotty.dokka.tasty.TypesSupport.texts/scala.collection.immutable.List/[java.lang.String]main/dotty.dokka/tasty/-types-support/texts.html
 $dokka.location:dotty.dokka.tasty/TypesSupport/typeBound/#/PointingToDeclaration/dotty.dokka.tasty.TypesSupport.typeBound/scala.collection.immutable.List/[java.lang.Object/scala.Boolean]main/dotty.dokka/tasty/-types-support/type-bound.html
+$dokka.location:dotty.dokka/Args$///PointingToDeclaration/dotty.dokka.Args$.CommentSyntax$//[]main/dotty.dokka/-args$/-comment-syntax$/index.html
+$dokka.location:dotty.dokka/Args$///PointingToDeclaration/dotty.dokka.Args$.CommentSyntax//[]main/dotty.dokka/-args$/-comment-syntax/index.html
+$dokka.location:dotty.dokka/Args$///PointingToDeclaration/dotty.dokka.Args$//[]main/dotty.dokka/-args$/index.html
+$dokka.location:dotty.dokka/Args$/fromString/#/PointingToDeclaration/dotty.dokka.Args$.CommentSyntax$.fromString/scala.Option/[java.lang.String]main/dotty.dokka/-args$/-comment-syntax$/from-string.html
 $dokka.location:dotty.dokka/Args///PointingToDeclaration/dotty.dokka.Args//[]main/dotty.dokka/-args/index.html
 $dokka.location:dotty.dokka/BaseKey///PointingToDeclaration/dotty.dokka.BaseKey//[]main/dotty.dokka/-base-key/index.html
 $dokka.location:dotty.dokka/BaseKey/mergeStrategyFor/#/PointingToDeclaration/dotty.dokka.BaseKey.mergeStrategyFor/org.jetbrains.dokka.model.properties.MergeStrategy/[java.lang.Object/java.lang.Object]main/dotty.dokka/-base-key/merge-strategy-for.html
