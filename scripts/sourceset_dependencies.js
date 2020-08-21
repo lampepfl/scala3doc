@@ -1,1 +1,1 @@
-sourceset_dependencies = '{"main/main": []}'
+sourceset_dependencies = '{"scala3doc/main": []}'
