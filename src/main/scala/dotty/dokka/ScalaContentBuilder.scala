@@ -27,7 +27,7 @@ class ScalaPageContentBuilder(
         kind: Kind = ContentKind.Main,
         styles: Set[Style] = Set(),
         extra: PropertyContainer[ContentNode] = PropertyContainer.Companion.empty(),
-        buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+        buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder
     ): ContentGroup = buildBlock(
             ScalaDocumentableContentBuilder(Set(dri), sourceSets, kind, styles, extra)
         ).buildContent()
@@ -38,7 +38,7 @@ class ScalaPageContentBuilder(
         kind: Kind = ContentKind.Main,
         styles: Set[Style] = Set(),
         extra: PropertyContainer[ContentNode] = PropertyContainer.Companion.empty(),
-        buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+        buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder
     ): ContentGroup = buildBlock(
             ScalaDocumentableContentBuilder(dris, sourceSets, kind, styles, extra)
         ).buildContent()
@@ -48,7 +48,7 @@ class ScalaPageContentBuilder(
         kind: Kind = ContentKind.Main,
         styles: Set[Style] = Set(),
         extra: PropertyContainer[ContentNode] = PropertyContainer.Companion.empty(),
-        buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+        buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder
     ): ContentGroup = {
         buildBlock(
             ScalaDocumentableContentBuilder(Set(d.getDri), d.getSourceSets.asScala.toSet, kind, styles, extra)
@@ -71,7 +71,7 @@ class ScalaPageContentBuilder(
             kind: Kind = mainKind,
             styles: Set[Style] = mainStyles,
             extra: PropertyContainer[ContentNode] = mainExtra)(
-            buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder
         ): ScalaTableBuilder = addChild(self.contentForDRIs(dri, sourceSets, kind, styles, extra, buildBlock))
 
         def build() = cells
@@ -104,7 +104,7 @@ class ScalaPageContentBuilder(
             styles: Set[Style] = mainStyles,
             extra: PropertyContainer[ContentNode] = mainExtra
         )(
-            buildBlock: ScalaPageContentBuilder#ScalaDivergentInstanceBuilder => ScalaPageContentBuilder#ScalaDivergentInstanceBuilder
+            buildBlock: ScalaDivergentInstanceBuilder => ScalaDivergentInstanceBuilder
         ): ScalaDivergentBuilder = addChild(
             buildBlock(ScalaDivergentInstanceBuilder(dri, kind, sourceSets, styles, extra)).buildContent()
         )
@@ -137,7 +137,7 @@ class ScalaPageContentBuilder(
             styles: Set[Style] = mainStyles,
             extra: PropertyContainer[ContentNode] = mainExtra
         )(
-            buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder
         ): ScalaDivergentInstanceBuilder = copy(
             before = Some(
                 self.contentForDRIs(dri, sourceSets, kind, styles, extra, buildBlock)
@@ -151,7 +151,7 @@ class ScalaPageContentBuilder(
             styles: Set[Style] = mainStyles,
             extra: PropertyContainer[ContentNode] = mainExtra
         )(
-            buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder
         ): ScalaDivergentInstanceBuilder = copy(
             divergent = self.contentForDRIs(dri, sourceSets, kind, styles, extra, buildBlock)
         )
@@ -163,7 +163,7 @@ class ScalaPageContentBuilder(
             styles: Set[Style] = mainStyles,
             extra: PropertyContainer[ContentNode] = mainExtra
         )(
-            buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder
         ): ScalaDivergentInstanceBuilder = copy(
             after = Some(
                 self.contentForDRIs(dri, sourceSets, kind, styles, extra, buildBlock)
@@ -200,7 +200,7 @@ class ScalaPageContentBuilder(
             styles: Set[Style] = mainStyles,
             extra: PropertyContainer[ContentNode] = mainExtra
         )(
-            buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder
         ): ScalaDocumentableContentBuilder = addChild(
             self.contentForDRIs(dri, sourceSets, kind, styles, extra, buildBlock)
         )
@@ -212,7 +212,7 @@ class ScalaPageContentBuilder(
             sourceSets: Set[DokkaConfiguration$DokkaSourceSet] = mainSourcesetData,
             styles: Set[Style] = mainStyles,
             extra: PropertyContainer[ContentNode] = mainExtra)(
-            buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder = p => p
+            buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder = p => p
         ): ScalaDocumentableContentBuilder = addChild(
                 ContentHeader(
                     level, 
@@ -233,7 +233,7 @@ class ScalaPageContentBuilder(
             sourceSets: Set[DokkaConfiguration$DokkaSourceSet] = mainSourcesetData,
             styles: Set[Style] = mainStyles,
             extra: PropertyContainer[ContentNode] = mainExtra)(
-            buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder
         ): ScalaDocumentableContentBuilder = header(1, text, kind, sourceSets, styles, extra){buildBlock}
 
         def signature(d: Documentable) = addChildren(signatureProvider.signature(d).asScala.toList)
@@ -258,7 +258,7 @@ class ScalaPageContentBuilder(
             extra: PropertyContainer[ContentNode] = mainExtra,
             headers: List[ContentGroup] = defaultHeaders
             )(
-            buildBlock: ScalaPageContentBuilder#ScalaTableBuilder => ScalaPageContentBuilder#ScalaTableBuilder
+            buildBlock: ScalaTableBuilder => ScalaTableBuilder
             ) = addChild(
             ContentTable(
                 headers.asJava,
@@ -301,9 +301,9 @@ class ScalaPageContentBuilder(
             needsAnchors: Boolean = true,
             omitSplitterOnSingletons: Boolean = true
         )(
-            groupSplitterFunc: (ScalaPageContentBuilder#ScalaDocumentableContentBuilder, A) => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            groupSplitterFunc: (ScalaDocumentableContentBuilder, A) => ScalaDocumentableContentBuilder
         )(
-            elementFunc: (ScalaPageContentBuilder#ScalaDocumentableContentBuilder, T) => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            elementFunc: (ScalaDocumentableContentBuilder, T) => ScalaDocumentableContentBuilder
         ) = if (renderWhenEmpty || !elements.isEmpty) {
             header(3, name, kind, styles = styles, extra = extra plus SimpleAttr.Companion.header(name))()
             .group(styles = Set(ContentStyle.WithExtraAttributes), extra = extra plus SimpleAttr.Companion.header(name)){ bdr =>
@@ -328,10 +328,10 @@ class ScalaPageContentBuilder(
             separator: String = ", ",
             sourceSets: Set[DokkaConfiguration$DokkaSourceSet] = mainSourcesetData
         )(
-            elemOp: (ScalaPageContentBuilder#ScalaDocumentableContentBuilder, T) => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            elemOp: (ScalaDocumentableContentBuilder, T) => ScalaDocumentableContentBuilder
         ) = if(!elements.isEmpty){
             val withPrefix = (if(!prefix.isEmpty) text(prefix, sourceSets = sourceSets) else this)
-            val insertedElems = elements.dropRight(1).foldLeft[ScalaPageContentBuilder#ScalaDocumentableContentBuilder](withPrefix){ (bdr, elem) =>
+            val insertedElems = elements.dropRight(1).foldLeft[ScalaDocumentableContentBuilder](withPrefix){ (bdr, elem) =>
                 elemOp(bdr, elem).text(separator, sourceSets = sourceSets)
             }
             val withLast = elemOp(insertedElems, elements.last)
@@ -381,7 +381,7 @@ class ScalaPageContentBuilder(
             styles: Set[Style] = mainStyles,
             extra: PropertyContainer[ContentNode] = mainExtra
         )(
-            buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder
         ) = addChild(
             ContentDRILink(
                 self.contentForDRIs(mainDRI, sourceSets, kind, styles, extra, buildBlock).getChildren,
@@ -420,7 +420,7 @@ class ScalaPageContentBuilder(
             extra: PropertyContainer[ContentNode] = mainExtra,
             implicitlySourceSetHinted: Boolean = true
         )(
-            buildBlock: ScalaPageContentBuilder#ScalaDivergentBuilder => ScalaPageContentBuilder#ScalaDivergentBuilder
+            buildBlock: ScalaDivergentBuilder => ScalaDivergentBuilder
         ) = addChild(
             buildBlock(ScalaDivergentBuilder(groupId, dri, kind, styles, extra, implicitlySourceSetHinted)).buildContent()
         )
@@ -432,7 +432,7 @@ class ScalaPageContentBuilder(
             styles: Set[Style] = mainStyles,
             extra: PropertyContainer[ContentNode] = mainExtra,
         )(
-            buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            buildBlock: ScalaDocumentableContentBuilder => ScalaDocumentableContentBuilder
         ) = addChild(
             PlatformHintedContent(
                 self.contentForDRIs(dri, sourceSets, kind, styles, extra, buildBlock),
@@ -453,7 +453,7 @@ class ScalaPageContentBuilder(
             needsAnchors: Boolean = true,
             omitSplitterOnSingletons: Boolean = true
         )(
-            groupSplitterFunc: (ScalaPageContentBuilder#ScalaDocumentableContentBuilder, A) => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+            groupSplitterFunc: (ScalaDocumentableContentBuilder, A) => ScalaDocumentableContentBuilder
         ) = if (renderWhenEmpty || !elements.isEmpty) {
             header(3, name, kind, styles = styles, extra = extra plus SimpleAttr.Companion.header(name))()
             .group(styles = Set(ContentStyle.WithExtraAttributes), extra = extra plus SimpleAttr.Companion.header(name)){ bdr =>
