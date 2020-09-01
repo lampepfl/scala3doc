@@ -13,7 +13,7 @@
 <li>and much more</li>
 </ul>
 <p><strong>Yes, this page was generated using dotty-dokka</strong></p>
-<p>You can learn more from out <a href="dotty-dokka/index.html">documentation</a>.</p>
+<p>You can learn more from out <a href="scala3doc/index.html">documentation</a>.</p>
 <h2>Getting started</h2>
 <p>For now the recommended way to try out our project would be:</p>
 <ul>
@@ -21,12 +21,14 @@
 <p>Clone our <a href="https://github.com/Virtuslab/dotty-dokka">repository</a></p>
 </li>
 <li>
-<p>Run <code>sbt main -n &lt;name&gt; -o &lt;output&gt; -t &lt;tasty-files&gt; -cp &lt;classpath&gt;</code> where</p>
+<p>Run <code>sbt main -n &lt;name&gt; -o &lt;output&gt; -t &lt;tasty-files&gt; -cp &lt;classpath&gt; -s { &lt;sources&gt; }</code> where</p>
 <ul>
 <li><code>&lt;name&gt;</code>: name of module in generated documentation</li>
 <li><code>&lt;output&gt;</code>: location where documentation should be created</li>
 <li><code>&lt;tasty-files&gt;</code>: is list of dirs or jars that contains tasty files that should be documented</li>
 <li><code>&lt;classpath&gt;</code>: classpath that was used to generate tasty files</li>
+<li><code>&lt;sources&gt;</code>: links to source files of module that are used to link symbols on pages to their source file. They need to be supplied in form:
+local_dir=remote_dir#line_suffix e.g. src/main/scala=https://github.com/lampepfl/scala3doc/tree/master/src/main/scala#L</li>
 </ul>
 <p>We also support <code>-d &lt;documentation&gt;</code> argument to provide static documentation. You can find more about that feature <a href="static-page.html">here</a>.</p>
 </li>
