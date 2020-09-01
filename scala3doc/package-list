@@ -250,6 +250,7 @@ $dokka.location:dotty.dokka.tasty/SyntheticsSupport/hackIsExtension/#/PointingTo
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/hackIsLeftAssoc/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.hackIsLeftAssoc/scala.Boolean/[java.lang.Object]scala3doc/dotty.dokka/tasty/-synthetics-support/hack-is-left-assoc.html
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/hackIsOpaque/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.hackIsOpaque/scala.Boolean/[scala.tasty.Reflection/java.lang.Object]scala3doc/dotty.dokka/tasty/-synthetics-support/hack-is-opaque.html
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/isExtensionMethod/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.isExtensionMethod/scala.Boolean/[java.lang.Object]scala3doc/dotty.dokka/tasty/-synthetics-support/is-extension-method.html
+$dokka.location:dotty.dokka.tasty/SyntheticsSupport/isOpaque/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.isOpaque/scala.Boolean/[java.lang.Object]scala3doc/dotty.dokka/tasty/-synthetics-support/is-opaque.html
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/isSyntheticField/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.isSyntheticField/scala.Boolean/[java.lang.Object/java.lang.Object]scala3doc/dotty.dokka/tasty/-synthetics-support/is-synthetic-field.html
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/isSyntheticFunc/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.isSyntheticFunc/scala.Boolean/[java.lang.Object]scala3doc/dotty.dokka/tasty/-synthetics-support/is-synthetic-func.html
 $dokka.location:dotty.dokka.tasty/SyntheticsSupport/isValidPos/#/PointingToDeclaration/dotty.dokka.tasty.SyntheticsSupport.isValidPos/scala.Boolean/[java.lang.Object]scala3doc/dotty.dokka/tasty/-synthetics-support/is-valid-pos.html
@@ -264,7 +265,7 @@ $dokka.location:dotty.dokka.tasty/TypesSupport///PointingToDeclaration/dotty.dok
 $dokka.location:dotty.dokka.tasty/TypesSupport/commas/#/PointingToDeclaration/dotty.dokka.tasty.TypesSupport.commas/scala.collection.immutable.List/[scala.collection.immutable.List]scala3doc/dotty.dokka/tasty/-types-support/commas.html
 $dokka.location:dotty.dokka.tasty/TypesSupport/inner/#/PointingToDeclaration/dotty.dokka.tasty.TypesSupport.inner/scala.collection.immutable.List/[java.lang.Object/java.lang.Object]scala3doc/dotty.dokka/tasty/-types-support/inner.html
 $dokka.location:dotty.dokka.tasty/TypesSupport/isRepeated/#/PointingToDeclaration/dotty.dokka.tasty.TypesSupport.isRepeated/scala.Boolean/[java.lang.Object]scala3doc/dotty.dokka/tasty/-types-support/is-repeated.html
-$dokka.location:dotty.dokka.tasty/TypesSupport/link/#/PointingToDeclaration/dotty.dokka.tasty.TypesSupport.link/org.jetbrains.dokka.model.Projection/[java.lang.Object/java.lang.Object]scala3doc/dotty.dokka/tasty/-types-support/link.html
+$dokka.location:dotty.dokka.tasty/TypesSupport/link/#/PointingToDeclaration/dotty.dokka.tasty.TypesSupport.link/scala.collection.immutable.List/[java.lang.Object/java.lang.Object]scala3doc/dotty.dokka/tasty/-types-support/link.html
 $dokka.location:dotty.dokka.tasty/TypesSupport/text/#/PointingToDeclaration/dotty.dokka.tasty.TypesSupport.text/org.jetbrains.dokka.model.Projection/[java.lang.String]scala3doc/dotty.dokka/tasty/-types-support/text.html
 $dokka.location:dotty.dokka.tasty/TypesSupport/texts/#/PointingToDeclaration/dotty.dokka.tasty.TypesSupport.texts/scala.collection.immutable.List/[java.lang.String]scala3doc/dotty.dokka/tasty/-types-support/texts.html
 $dokka.location:dotty.dokka.tasty/TypesSupport/typeBound/#/PointingToDeclaration/dotty.dokka.tasty.TypesSupport.typeBound/scala.collection.immutable.List/[java.lang.Object/scala.Boolean]scala3doc/dotty.dokka/tasty/-types-support/type-bound.html
@@ -773,6 +774,7 @@ $dokka.location:tests.traitSignatures/A///PointingToDeclaration/tests.traitSigna
 $dokka.location:tests.traitSignatures/B///PointingToDeclaration/tests.traitSignatures.B//[]scala3doc/tests/traitSignatures/-b/index.html
 $dokka.location:tests.traitSignatures/C///PointingToDeclaration/tests.traitSignatures.C//[]scala3doc/tests/traitSignatures/-c/index.html
 $dokka.location:tests.traitSignatures/D///PointingToDeclaration/tests.traitSignatures.D//[]scala3doc/tests/traitSignatures/-d/index.html
+$dokka.location:tests.typeLambdas////PointingToDeclaration/scala3doc/tests/typeLambdas.html
 $dokka.location:tests.typesSignatures////PointingToDeclaration/scala3doc/tests/typesSignatures/index.html
 $dokka.location:tests.typesSignatures/A///PointingToDeclaration/tests.typesSignatures.A//[]scala3doc/tests/typesSignatures/-a/index.html
 $dokka.location:tests.typesSignatures/Base///PointingToDeclaration/tests.typesSignatures.Base//[]scala3doc/tests/typesSignatures/-base/index.html
@@ -835,6 +837,7 @@ structuralTypes
 tasty
 tests
 traitSignatures
+typeLambdas
 typesSignatures
 wiki
 
