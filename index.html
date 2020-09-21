@@ -2,37 +2,83 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>index</title>
+    <script type="text/javascript" src="scripts/navigationLoader.js" async="async"></script>
+    <script type="text/javascript" src="scripts/platformContentHandler.js" async="async"></script>
+    <script type="text/javascript" src="scripts/sourceset_dependencies.js" async="async"></script>
+    <script type="text/javascript" src="scripts/clipboard.js" async="async"></script>
+    <link href="styles/nord-light.css" rel="Stylesheet">
+    <link href="styles/scalastyle.css" rel="Stylesheet">
+    <link href="styles/dotty-icons.css" rel="Stylesheet">
+    <script type="text/javascript" src="hljs/highlight.pack.js" async="async"></script>
+    <script type="text/javascript" src="scripts/hljs-scala3.js" async="async"></script>
+    <script type="text/javascript" src="scripts/ux.js" async="async"></script>
     <script>var pathToRoot = "";</script>
   </head>
-  <body><h1>Scala3doc</h1>
-<p><strong>Documentation tool for Scala 3</strong></p>
-<p>We are using <a href="https://github.com/lampepfl/dotty/blob/master/tasty/src/dotty/tools/tasty/TastyFormat.scala">TASTy</a> to generate documentation. We aim to has all known and loved feature from scaladoc as well as new feature such as :</p>
-<ul>
-<li>integrated documentation and API</li>
-<li>has option for basic pluggablity</li>
-<li>and much more</li>
-</ul>
-<p><strong>Yes, this page was generated using scala3doc</strong></p>
-<p>You can learn more from out <a href="scala3doc/index.html">documentation</a>.</p>
-<h2>Getting started</h2>
-<p>For now the recommended way to try out our project would be:</p>
-<ul>
-<li>
-<p>Clone our <a href="https://github.com/lampepfl/scala3doc">repository</a></p>
-</li>
-<li>
-<p>Run <code>sbt main -n &lt;name&gt; -o &lt;output&gt; -t &lt;tasty-files&gt; -cp &lt;classpath&gt; -s { &lt;sources&gt; }</code> where</p>
-<ul>
-<li><code>&lt;name&gt;</code>: name of module in generated documentation</li>
-<li><code>&lt;output&gt;</code>: location where documentation should be created</li>
-<li><code>&lt;tasty-files&gt;</code>: is list of dirs or jars that contains tasty files that should be documented</li>
-<li><code>&lt;classpath&gt;</code>: classpath that was used to generate tasty files</li>
-<li><code>&lt;sources&gt;</code>: links to source files of module that are used to link symbols on pages to their source file. They need to be supplied in form:
-local_dir=remote_dir#line_suffix e.g. src/main/scala=https://github.com/lampepfl/scala3doc/tree/master/src/main/scala#L</li>
-</ul>
-<p>We also support <code>-d &lt;documentation&gt;</code> argument to provide static documentation. You can find more about that feature <a href="static-page.html">here</a>.</p>
-</li>
-</ul>
-</body>
+  <body>
+    <div id="container">
+      <div id="leftColumn">
+        <div id="logo"></div>
+        <div id="paneSearch"></div>
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <div id="searchBar"></div>
+        <script type="text/javascript" src="scripts/pages.js"></script>
+        <script type="text/javascript" src="scripts/main.js"></script>
+        <div id="content" pageIds="////PointingToDeclaration/_top_level_index">
+          <div class="breadcrumbs"><a href="index.html">index</a></div>
+          <div><div>
+  <p class="paragraph">
+    <h1 class=""><a></a>Scala3doc</h1>
+    <p class="paragraph">Documentation tool for Scala 3</p>
+    <p class="paragraph">We are using <a href="https://github.com/lampepfl/dotty/blob/master/tasty/src/dotty/tools/tasty/TastyFormat.scala">TASTy</a> to generate documentation. We aim to has all known and loved feature from scaladoc as well as new feature such as :</p>
+    <ul>
+      <li>
+        <p class="paragraph">integrated documentation and API</p>
+      </li>
+      <li>
+        <p class="paragraph">has option for basic pluggablity</p>
+      </li>
+      <li>
+        <p class="paragraph">and much more</p>
+      </li>
+    </ul>
+    <p class="paragraph">Yes, this page was generated using scala3doc</p>
+    <p class="paragraph">You can learn more from out <a href="scala3doc/index.html">documentation</a>.</p>
+    <h2 class=""><a></a> Getting started</h2>
+    <p class="paragraph">For now the recommended way to try out our project would be:</p>
+    <ul>
+      <li>
+        <p class="paragraph">Clone our <a href="https://github.com/lampepfl/scala3doc">repository</a></p>
+      </li>
+      <li>
+        <p class="paragraph">Run <code>sbt main -n &lt;name&gt; -o &lt;output&gt; -t &lt;tasty-files&gt; -cp &lt;classpath&gt; -s { &lt;sources&gt; } </code> where</p>
+        <ul>
+          <li>
+            <p class="paragraph"><code>&lt;name&gt;</code>: name of module in generated documentation</p>
+          </li>
+          <li>
+            <p class="paragraph"><code>&lt;output&gt;</code>: location where documentation should be created</p>
+          </li>
+          <li>
+            <p class="paragraph"><code>&lt;tasty-files&gt;</code>: is list of dirs or jars that contains tasty files that should be documented</p>
+          </li>
+          <li>
+            <p class="paragraph"><code>&lt;classpath&gt;</code>: classpath that was used to generate tasty files</p>
+          </li>
+          <li>
+            <p class="paragraph"><code>&lt;sources&gt;</code>: links to source files of module that are used to link symbols on pages to their source file. They need to be supplied in form:       local_dir=remote_dir#line_suffix e.g. src/main/scala=https://github.com/lampepfl/scala3doc/tree/master/src/main/scala#L</p>
+          </li>
+        </ul>
+        <p class="paragraph">We also support <code>-d &lt;documentation&gt;</code> argument to provide static documentation. You can find more about that feature <a href="static-page.html">here</a>.</p>
+      </li>
+    </ul>
+  </p>
+</div>
+</div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
 

@@ -18,153 +18,116 @@
     <div id="container">
       <div id="leftColumn">
         <div id="logo"></div>
-        <nav id="sideMenu"></nav>
+        <div id="paneSearch"></div>
+        <div id="sideMenu"></div>
       </div>
       <div id="main">
-        <div id="leftToggler"><span class="icon-toggler"></span></div>
         <div id="searchBar"></div>
-        <main>
-          <div id="content" pageIds="////PointingToDeclaration/">
-            <div class="breadcrumbs">//<a href="index.html">scala3doc</a></div>
-            <div><h1>Scala3doc</h1>
-<p>Scala3doc (name subject to change) is the documentation tool for
-<a href="https://github.com/lampepfl/dotty">Dotty</a>, which is scheduled to become
-Scala 3. It's based on <a href="https://github.com/Kotlin/dokka">Dokka</a>, the
-documentation tool for Kotlin. It uses Tasty-Reflect to access definitions,
-which is an officially supported way to access Dotty's perspective of a
-codebase.</p>
-<p>We're aiming to support all the features Scaladoc did, plus new and exciting ones such as:</p>
-<ul>
-<li>Markdown syntax!</li>
-<li>displaying project and API documentation together on one site!</li>
-<li>and more!</li>
-</ul>
-<h2>Running the project</h2>
-<p>Use the following commands to generate documentation for this project and for Dotty, respectively:</p>
-<pre><code>sbt generateSelfDocumentation
-sbt generateDottyLibDocumentation
-</code></pre>
-<p>To actually view the documentation, the easiest way is to run the following in project root:</p>
-<pre><code>cd output
-python3 -m http.server 8080
-</code></pre>
-<p>And afterwards point your browser to <code>http://localhost:8080/self</code> or
-<code>http://localhost:8080/stdLib</code> for this project and for Dotty documentation
-respectively.</p>
-<p>It's not strictly necessary to go through an HTTP server, but because of CORS
-the documentation won't work completely if you don't.</p>
-<h2>Developing</h2>
-<p>At least two of our contributors use <a href="https://scalameta.org/metals/">Metals</a> to
-work on the project.</p>
-<p>For every PR, we build documentation for Scala3doc and Dotty. For example, for
-PR 123 you can find them at:</p>
-<ul>
-<li>https://scala3doc.s3.eu-central-1.amazonaws.com/pr-123/self/main/index.html</li>
-<li>https://scala3doc.s3.eu-central-1.amazonaws.com/pr-123/stdLib/main/index.html</li>
-</ul>
-<p>Note that these correspond to the contents of <code>output</code> directory - that's
-precisely what they are.</p>
-<p>You can also find the result of building the same sites for latest <code>master</code> at:</p>
-<ul>
-<li>https://scala3doc.s3.eu-central-1.amazonaws.com/pr-master/self/main/index.html</li>
-<li>https://scala3doc.s3.eu-central-1.amazonaws.com/pr-master/stdLib/main/index.html</li>
-</ul>
-<h3>Testing</h3>
-<p>Most tests rely on comparing signatures (of classes, methods, objects etc.) extracted from the generated documentation
-to signatures found in source files. Such tests are defined using <a href="src/test/scala/dotty/dokka/MultipleFileTest.scala">MultipleFileTest</a> class
-and its subtypes (such as <a href="src/test/scala/dotty/dokka/SingleFileTest.scala">SingleFileTest</a>)</p>
-<p>WARNING: As the classes mentioned above are likely to evolve, the description below might easily get out of date.
-In case of any discrepancies rely on the source files instead.</p>
-<p><code>MultipleFileTest</code> requires that you specify the names of the files used to extract signatures,
-the names of directories containing corresponding TASTY files
-and the kinds of signatures from source files (corresponding to keywords used to declare them like <code>def</code>, <code>class</code>, <code>object</code> etc.)
-whose presence in the generated documentation will be checked (other signatures, when missing, will be ignored).
-The mentioned source files should be located directly inside <code>src/main/scala/tests</code> directory
-but the file names passed as parameters should contain neither this path prefix nor <code>.scala</code> suffix.
-The TASTY folders are expected to be located in <code>target/${dottyVersion}/classes/tests</code> (after successful compilation of the project)
-and similarly only their names relative to this path should be provided as tests' parameters.
-For <code>SingleFileTest</code> the name of the source file and the TASTY folder are expected to be the same.</p>
-<p>By default it's expected that all signatures from the source files will be present in the documentation
-but not vice versa (because the documentation can contain also inherited signatures).
-To validate that a signature present in the source does not exist in the documentation
-(because they should be hidden from users) add <code>//unexpected</code> comment after the signature in the same line.
-This will cause an error if a signature with the same name appears in the documentation
-(even if some elements of the signature are slightly different - to avoid accidentally passing tests).
-If the signature in the documentation is expected to slightly differ from how it's defined in the source code
-you can add a <code>//expected:</code> comment (also in the same line and followed by a space) followed by the expected signature.
-Alternatively you can use <code>/*&lt;-*/</code> and <code>/*-&gt;*/</code> as opening and closing parentheses for parts of a signature present in the source but undesired in the documentation (at least at the current stage of development), e.g.</p>
-<pre><code>def foo/*&lt;-*/()/*-&gt;*/: Int
-</code></pre>
-<p>will make the expected signature be</p>
-<pre><code>def foo: Int
-</code></pre>
-<p>instead of</p>
-<pre><code>def foo(): Int
-</code></pre>
-<p>Because of the way how signatures in source are parsed, they're expected to span until the end of a line (including comments except those special ones mentioned above, which change the behaviour of tests) so if a definition contains an implementation, it should be placed in a separate line, e.g.</p>
-<pre><code>def foo: Int
-   = 1
-
-class Bar
-{
-   //...
-}
-</code></pre>
-<p>Otherwise the implementation would be treated as a part of the signature.</p>
-<h2>Roadmap</h2>
-<ol>
-<li>
-<p>Publish an initial version of the tool together with an SBT plugin</p>
-</li>
-<li>
-<p>Replace Dottydoc as the dedicated tool for documenting Dotty code</p>
-<p>This includes:</p>
-<ul>
-<li>supporting Dotty's doc pages</li>
-<li>releasing together with Dotty as the dedicated documentation tool</li>
-</ul>
-</li>
-<li>
-<p>Support all kinds of Dotty definition and generate documentation for the
-standard library</p>
-</li>
-<li>
-<p>Reach feature parity with Scaladoc</p>
-</li>
-</ol>
-<h2>Contributing</h2>
-<p>We're happy that you'd like to help us!</p>
-<p>We have two issue labels you should take a look at: <code>good first issue</code> and
-<code>self-contained</code>. First is easy pickings: you'll be able to contribute without
-needing to dive too deep into the project. Second is reverse: it's an issue
-that's you may find interesting, complex and self-contained enough that you can
-continue chipping away at it without needing to worry too much about merge
-conflicts.</p>
-<p>To contribute to the project with your code, fork this repo and create a pull request from a fresh branch from there.
-To keep the history of commits clean, make sure your commits are squashed into one
-and all your changes are applied on top of the latest master branch (if not - rebase on it instead of merging it).
-Make sure all the tests pass (simply run <code>sbt test</code> to verify that).</p>
-<h2>FAQ</h2>
-<h3>Why depend on Dokka?</h3>
-<p>We have two primary reasons for depending on Dokka. One of them is division of
-labour - Dokka already has a team of maintainers, and it supports an excellent
-API which already allowed us to quite easily generate documentation with it. By
-depending on Dokka, we will be able to share a large portion of the maintenance
-burden. The second reason is very pragmatic - on our own, it'd be difficult for
-us to reach even feature parity with Scaladoc, simply because of workforce
-constraints. Meanwhile, Dokka maintainers from VirtusLab reached out to us with
-an offer of help, which we were happy to take.</p>
-<h3>Why use TASTy?</h3>
-<p>A documentation tool needs to access compiler information about the project - it
-needs to list all definitions, resolve them by name, and query their members.
-Tasty Reflect is the dedicated way in Scala 3 of accessing this information.</p>
+        <script type="text/javascript" src="../scripts/pages.js"></script>
+        <script type="text/javascript" src="../scripts/main.js"></script>
+        <div id="content" pageIds="////PointingToDeclaration/">
+          <div class="breadcrumbs"><a href="index.html">scala3doc</a></div>
+          <div><div>
+  <p class="paragraph">
+    <h1 class=""><a></a>Scala3doc</h1>
+    <p class="paragraph">Scala3doc (name subject to change) is the documentation tool for <a href="https://github.com/lampepfl/dotty">Dotty</a>, which is scheduled to become Scala 3. It's based on <a href="https://github.com/Kotlin/dokka">Dokka</a>, the documentation tool for Kotlin. It uses Tasty-Reflect to access definitions, which is an officially supported way to access Dotty's perspective of a codebase.</p>
+    <p class="paragraph">We're aiming to support all the features Scaladoc did, plus new and exciting ones such as:</p>
+    <ul>
+      <li>
+        <p class="paragraph">Markdown syntax!</p>
+      </li>
+      <li>
+        <p class="paragraph">displaying project and API documentation together on one site!</p>
+      </li>
+      <li>
+        <p class="paragraph">and more!</p>
+      </li>
+    </ul>
+    <h2 class=""><a></a> Running the project</h2>
+    <p class="paragraph">Use the following commands to generate documentation for this project and for Dotty, respectively:</p>
+    <pre><code class=" language-scala" theme="idea">sbt generateSelfDocumentation<br>sbt generateDottyLibDocumentation</code></pre>
+    <p class="paragraph">To actually view the documentation, the easiest way is to run the following in project root:</p>
+    <pre><code class=" language-scala" theme="idea">cd output<br>python3 -m http.server 8080</code></pre>
+    <p class="paragraph">And afterwards point your browser to <code>http://localhost:8080/self</code> or <code>http://localhost:8080/stdLib</code> for this project and for Dotty documentation respectively.</p>
+    <p class="paragraph">It's not strictly necessary to go through an HTTP server, but because of CORS the documentation won't work completely if you don't.</p>
+    <h2 class=""><a></a> Developing</h2>
+    <p class="paragraph">At least two of our contributors use <a href="https://scalameta.org/metals/">Metals</a> to work on the project.</p>
+    <p class="paragraph">For every PR, we build documentation for Scala3doc and Dotty. For example, for PR 123 you can find them at:</p>
+    <ul>
+      <li>
+        <p class="paragraph">https://scala3doc.s3.eu-central-1.amazonaws.com/pr-123/self/main/index.html</p>
+      </li>
+      <li>
+        <p class="paragraph">https://scala3doc.s3.eu-central-1.amazonaws.com/pr-123/stdLib/main/index.html</p>
+      </li>
+    </ul>
+    <p class="paragraph">Note that these correspond to the contents of <code>output</code> directory - that's precisely what they are.</p>
+    <p class="paragraph">You can also find the result of building the same sites for latest <code>master</code> at:</p>
+    <ul>
+      <li>
+        <p class="paragraph">https://scala3doc.s3.eu-central-1.amazonaws.com/pr-master/self/main/index.html</p>
+      </li>
+      <li>
+        <p class="paragraph">https://scala3doc.s3.eu-central-1.amazonaws.com/pr-master/stdLib/main/index.html</p>
+      </li>
+    </ul>
+    <h3 class=""><a></a> Testing</h3>
+    <p class="paragraph">Most tests rely on comparing signatures (of classes, methods, objects etc.) extracted from the generated documentation to signatures found in source files. Such tests are defined using <a href="src/test/scala/dotty/dokka/MultipleFileTest.scala">MultipleFileTest</a> class and its subtypes (such as <a href="src/test/scala/dotty/dokka/SingleFileTest.scala">SingleFileTest</a>)</p>
+    <p class="paragraph">WARNING: As the classes mentioned above are likely to evolve, the description below might easily get out of date. In case of any discrepancies rely on the source files instead.</p>
+    <p class="paragraph"><code>MultipleFileTest</code> requires that you specify the names of the files used to extract signatures, the names of directories containing corresponding TASTY files and the kinds of signatures from source files (corresponding to keywords used to declare them like <code>def</code>, <code>class</code>, <code>object</code> etc.) whose presence in the generated documentation will be checked (other signatures, when missing, will be ignored). The mentioned source files should be located directly inside <code>src/main/scala/tests</code> directory but the file names passed as parameters should contain neither this path prefix nor <code>.scala</code> suffix. The TASTY folders are expected to be located in <code>target/${dottyVersion}/classes/tests</code> (after successful compilation of the project) and similarly only their names relative to this path should be provided as tests' parameters. For <code>SingleFileTest</code> the name of the source file and the TASTY folder are expected to be the same.</p>
+    <p class="paragraph">By default it's expected that all signatures from the source files will be present in the documentation but not vice versa (because the documentation can contain also inherited signatures). To validate that a signature present in the source does not exist in the documentation (because they should be hidden from users) add <code>//unexpected</code> comment after the signature in the same line. This will cause an error if a signature with the same name appears in the documentation (even if some elements of the signature are slightly different - to avoid accidentally passing tests). If the signature in the documentation is expected to slightly differ from how it's defined in the source code you can add a <code>//expected: </code> comment (also in the same line and followed by a space) followed by the expected signature. Alternatively you can use <code>/*&lt;-*/</code> and <code>/*-&gt;*/</code> as opening and closing parentheses for parts of a signature present in the source but undesired in the documentation (at least at the current stage of development), e.g.</p>
+    <pre><code class=" language-scala" theme="idea">def foo/*&lt;-*/()/*-&gt;*/: Int</code></pre>
+    <p class="paragraph">will make the expected signature be</p>
+    <pre><code class=" language-scala" theme="idea">def foo: Int</code></pre>
+    <p class="paragraph">instead of</p>
+    <pre><code class=" language-scala" theme="idea">def foo(): Int</code></pre>
+    <p class="paragraph">Because of the way how signatures in source are parsed, they're expected to span until the end of a line (including comments except those special ones mentioned above, which change the behaviour of tests) so if a definition contains an implementation, it should be placed in a separate line, e.g.</p>
+    <pre><code class=" language-scala" theme="idea">def foo: Int<br>   = 1<br><br>class Bar<br>{<br>   //...<br>}</code></pre>
+    <p class="paragraph">Otherwise the implementation would be treated as a part of the signature.</p>
+    <h2 class=""><a></a> Roadmap</h2>
+    <ol>
+      <li>
+        <p class="paragraph">Publish an initial version of the tool together with an SBT plugin</p>
+      </li>
+      <li>
+        <p class="paragraph">Replace Dottydoc as the dedicated tool for documenting Dotty code</p>
+        <p class="paragraph">This includes:</p>
+      </li>
+      <ul>
+        <li>
+          <p class="paragraph">supporting Dotty's doc pages</p>
+        </li>
+        <li>
+          <p class="paragraph">releasing together with Dotty as the dedicated documentation tool</p>
+        </li>
+      </ul>
+      <li>
+        <p class="paragraph">Support all kinds of Dotty definition and generate documentation for the    standard library</p>
+      </li>
+      <li>
+        <p class="paragraph">Reach feature parity with Scaladoc</p>
+      </li>
+    </ol>
+    <h2 class=""><a></a> Contributing</h2>
+    <p class="paragraph">We're happy that you'd like to help us!</p>
+    <p class="paragraph">We have two issue labels you should take a look at: <code>good first issue</code> and <code>self-contained</code>. First is easy pickings: you'll be able to contribute without needing to dive too deep into the project. Second is reverse: it's an issue that's you may find interesting, complex and self-contained enough that you can continue chipping away at it without needing to worry too much about merge conflicts.</p>
+    <p class="paragraph">To contribute to the project with your code, fork this repo and create a pull request from a fresh branch from there. To keep the history of commits clean, make sure your commits are squashed into one and all your changes are applied on top of the latest master branch (if not - rebase on it instead of merging it). Make sure all the tests pass (simply run <code>sbt test</code> to verify that).</p>
+    <h2 class=""><a></a> FAQ</h2>
+    <h3 class=""><a></a> Why depend on Dokka?</h3>
+    <p class="paragraph">We have two primary reasons for depending on Dokka. One of them is division of labour - Dokka already has a team of maintainers, and it supports an excellent API which already allowed us to quite easily generate documentation with it. By depending on Dokka, we will be able to share a large portion of the maintenance burden. The second reason is very pragmatic - on our own, it'd be difficult for us to reach even feature parity with Scaladoc, simply because of workforce constraints. Meanwhile, Dokka maintainers from VirtusLab reached out to us with an offer of help, which we were happy to take.</p>
+    <h3 class=""><a></a> Why use TASTy?</h3>
+    <p class="paragraph">A documentation tool needs to access compiler information about the project - it needs to list all definitions, resolve them by name, and query their members. Tasty Reflect is the dedicated way in Scala 3 of accessing this information.</p>
+  </p>
 </div>
-          </div>
-        </main>
-        <footer><span class="go-to-top-icon"><a href="#container"><span class="icon-vertical_align_top"></span> Back to top</a></span><span class="pull-right">Generated by <a href="https://github.com/lampepfl/scala3doc">Scala3Doc</a></span></footer>
+</div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#container"><svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11.3337 9.66683H0.666992L6.00033 3.66683L11.3337 9.66683Z" fill="black"/>
+    <path d="M0.666992 0.333496H11.3337V1.66683H0.666992V0.333496Z" fill="black"/>
+</svg></a></span><span>© 2020 Copyright</span><span class="pull-right"><span>Sponsored and developed by dokka</span><a href="https://github.com/Kotlin/dokka"><span class="padded-icon"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 0H2.3949L4.84076 2.44586L0 7.28662L0.713376 8L5.55414 3.15924L8 5.6051V0Z" fill="black"/>
+</svg></span></a></span></div>
       </div>
-      <script type="text/javascript" src="../scripts/pages.js"></script>
-      <script type="text/javascript" src="../scripts/main.js"></script>
     </div>
   </body>
 </html>

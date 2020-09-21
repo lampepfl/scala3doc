@@ -1,4 +1,4 @@
-$dokka.format:html
+$dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:dotty.dokka.tasty.comments.wiki////PointingToDeclaration/scala3doc/dotty.dokka/tasty/comments/wiki/index.html
 $dokka.location:dotty.dokka.tasty.comments.wiki/Block///PointingToDeclaration/dotty.dokka.tasty.comments.wiki.Block//[]scala3doc/dotty.dokka/tasty/comments/wiki/-block/index.html
@@ -302,9 +302,9 @@ $dokka.location:dotty.dokka/EnumExtension/getKey/#/PointingToDeclaration/dotty.d
 $dokka.location:dotty.dokka/ExtensionGroup///PointingToDeclaration/dotty.dokka.ExtensionGroup//[]scala3doc/dotty.dokka/-extension-group/index.html
 $dokka.location:dotty.dokka/ExtensionInformation///PointingToDeclaration/dotty.dokka.ExtensionInformation//[]scala3doc/dotty.dokka/-extension-information/index.html
 $dokka.location:dotty.dokka/FakeDottyDokkaModule$///PointingToDeclaration/dotty.dokka.FakeDottyDokkaModule$//[]scala3doc/dotty.dokka/-fake-dotty-dokka-module/index.html
-$dokka.location:dotty.dokka/FakeDottyDokkaModule$/getDocFile/#/PointingToDeclaration/dotty.dokka.FakeDottyDokkaModule$.getDocFile/java.lang.String/[]scala3doc/dotty.dokka/-fake-dotty-dokka-module/get-doc-file.html
+$dokka.location:dotty.dokka/FakeDottyDokkaModule$/getDocFile/#/PointingToDeclaration/dotty.dokka.FakeDottyDokkaModule$.getDocFile/java.io.File/[]scala3doc/dotty.dokka/-fake-dotty-dokka-module/get-doc-file.html
 $dokka.location:dotty.dokka/FakeDottyDokkaModule$/getName/#/PointingToDeclaration/dotty.dokka.FakeDottyDokkaModule$.getName/java.lang.String/[]scala3doc/dotty.dokka/-fake-dotty-dokka-module/get-name.html
-$dokka.location:dotty.dokka/FakeDottyDokkaModule$/getPath/#/PointingToDeclaration/dotty.dokka.FakeDottyDokkaModule$.getPath/java.lang.String/[]scala3doc/dotty.dokka/-fake-dotty-dokka-module/get-path.html
+$dokka.location:dotty.dokka/FakeDottyDokkaModule$/getPath/#/PointingToDeclaration/dotty.dokka.FakeDottyDokkaModule$.getPath/java.io.File/[]scala3doc/dotty.dokka/-fake-dotty-dokka-module/get-path.html
 $dokka.location:dotty.dokka/InheritanceInfo$///PointingToDeclaration/dotty.dokka.InheritanceInfo$//[]scala3doc/dotty.dokka/-inheritance-info$/index.html
 $dokka.location:dotty.dokka/InheritanceInfo///PointingToDeclaration/dotty.dokka.InheritanceInfo//[]scala3doc/dotty.dokka/-inheritance-info/index.html
 $dokka.location:dotty.dokka/InheritanceInfo/getKey/#/PointingToDeclaration/dotty.dokka.InheritanceInfo.getKey//[]scala3doc/dotty.dokka/-inheritance-info/get-key.html
