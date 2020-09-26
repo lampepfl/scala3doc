@@ -14,7 +14,7 @@ import kotlinx.html.stream.StreamKt
 import kotlinx.html.Gen_consumer_tagsKt
 
 
-class ScalaHtmlRenderer(ctx: DokkaContext) extends SiteRenderer(ctx) {
+class ScalaHtmlRenderer(ctx: DokkaContext) extends SiteRenderer(ctx):
     override def buildTable(f: FlowContent, node: ContentTable, pageContext: ContentPage, sourceSetRestriciton: java.util.Set[DisplaySourceSet]) = {
         if(node.getStyle.asScala.toSet.contains(TableStyle.DescriptionList)) withHtml(f, buildDescriptionList(node, pageContext, sourceSetRestriciton))
         else super.buildTable(f, node, pageContext, sourceSetRestriciton)
@@ -75,4 +75,21 @@ class ScalaHtmlRenderer(ctx: DokkaContext) extends SiteRenderer(ctx) {
         res
     }
     
-}
+
+    //open fun buildHtml(page: PageNode, resources: List<String>, content: FlowContent.() -> Unit) =
+    type KF[A, N] = kotlin.jvm.functions.Function1[A, N]
+    override def buildHtml(page: PageNode, resources: java.util.List[String], content: KF[_ >: FlowContent,kotlin.Unit]) =
+        super.buildHtml(page, resources, { (c: FlowContent) =>
+            val res = content.invoke(c)
+            withHtml(c, """
+            <!-- Embedding Script -->
+            <script src="https://scastie.scala-lang.org/embedded.js"></script>
+
+            <script>
+            window.addEventListener('load', function() {
+                scastie.Embedded('.language-scala', { targetType: 'dotty', isWorksheetMode: false });
+            });
+            </script>
+            """)
+            res
+        })

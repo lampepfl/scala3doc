@@ -25,3 +25,12 @@ For now the recommended way to try out our project would be:
       local_dir=remote_dir#line_suffix e.g. src/main/scala=https://github.com/lampepfl/scala3doc/tree/master/src/main/scala#L
 
    We also support `-d <documentation>` argument to provide static documentation. You can find more about that feature [here](static-page.html).
+
+
+
+## PG
+
+```scala
+val a = 123
+println(a)
+```
