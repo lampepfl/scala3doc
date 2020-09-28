@@ -1,7 +1,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>createResourceInstaller</title>
+    <title>process</title>
     <script type="text/javascript" src="../../../scripts/navigationLoader.js" async="async"></script>
     <script type="text/javascript" src="../../../scripts/platformContentHandler.js" async="async"></script>
     <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
@@ -25,18 +25,18 @@
         <div id="searchBar"></div>
         <script type="text/javascript" src="../../../scripts/pages.js"></script>
         <script type="text/javascript" src="../../../scripts/main.js"></script>
-        <div id="content" pageIds="dotty.dokka/DottyDokkaPlugin/createResourceInstaller/#/PointingToDeclaration/dotty.dokka.DottyDokkaPlugin.createResourceInstaller/org.jetbrains.dokka.transformers.pages.PageTransformer/[org.jetbrains.dokka.plugability.DokkaContext]">
-          <div class="breadcrumbs"><a href="../../index.html">scala3doc</a>/<a href="../index.html">dotty.dokka</a>/<a href="index.html">DottyDokkaPlugin</a>/<a href="create-resource-installer.html">createResourceInstaller</a></div>
+        <div id="content" pageIds="dotty.tools.dottydoc/Main$/process/#/PointingToDeclaration/dotty.tools.dottydoc.Main$.process/dotty.tools.dotc.reporting.Reporter/[java.lang.String[]/dotty.tools.dotc.core.Contexts$.Context]">
+          <div class="breadcrumbs"><a href="../../index.html">scala3doc</a>/<a href="../index.html">dotty.tools.dottydoc</a>/<a href="index.html">Main</a>/<a href="process.html">process</a></div>
           <div class="cover ">
-            <h1 class=""><a data-name="createresourceinstaller"></a>createResourceInstaller</h1>
+            <h1 class=""><a data-name="process"></a>process</h1>
           </div>
-<div class="divergent-group" data-filterable-current="scala3doc/main" data-filterable-set="scala3doc/main"><div class="brief-with-platform-tags"><div class="inner-brief-with-platform-tags"><div class="block borderless"><dl class="attributes"><dt>Source</dt><dd><a href="https://github.com/lampepfl/scala3doc/tree/master/src/main/scala/dotty/dokka/DottyDokkaPlugin.scala#L62">(source)</a></dd></dl></div></div>
+<div class="divergent-group" data-filterable-current="scala3doc/main" data-filterable-set="scala3doc/main"><div class="brief-with-platform-tags"><div class="inner-brief-with-platform-tags"><div class="block borderless"><div class="block borderless"><div class="block borderless"><p class="paragraph"><p class="paragraph">Actual entrypoint from SBT.</p><p class="paragraph">Internal SBT code for <code>sbt doc</code> locates this precise method with<br>reflection, and passes to us both <code>args</code> and <code>rootCtx</code>. &quot;Internal&quot; here<br>means that it's painful to modify this code with a plugin.</p><p class="paragraph"><code>args</code> contains arguments both for us and for the compiler (see code on<br>how they're split).</p></p></div></div><dl class="attributes"><dt>Source</dt><dd><a href="https://github.com/lampepfl/scala3doc/tree/master/src/main/scala/dotty/tools/dottydoc/Main.scala#L32">(source)</a></dd></dl></div></div>
 <span class="pull-right"></span></div>
 
   <div class="main-subrow">
     <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable="scala3doc/main"><div class="symbol "><div class="symbol monospace">
   <div class="block"></div>
-override def <a href="create-resource-installer.html">createResourceInstaller</a>(<span></span>ctx: <span data-unresolved-link="org.jetbrains.dokka.plugability/DokkaContext///PointingToDeclaration/org.jetbrains.dokka.plugability.DokkaContext//[]">DokkaContext</span>): <span data-unresolved-link="org.jetbrains.dokka.transformers.pages/PageTransformer///PointingToDeclaration/org.jetbrains.dokka.transformers.pages.PageTransformer//[]">PageTransformer</span></div></div></div></div>
+override def <a href="process.html">process</a>(<span></span>args: <span data-unresolved-link="scala/Array///PointingToDeclaration/scala.Array//[]">Array</span>[<span data-unresolved-link="scala/Predef$///PointingToGenericParameters(0)/scala.Predef$.String//[]">String</span>], <span></span>rootCtx: <span data-unresolved-link="dotty.tools.dotc.core/Contexts$///PointingToDeclaration/dotty.tools.dotc.core.Contexts$.Context//[]">Context</span>): <span data-unresolved-link="dotty.tools.dotc.reporting/Reporter///PointingToDeclaration/dotty.tools.dotc.reporting.Reporter//[]">Reporter</span></div></div></div></div>
   </div>
 </div>
         </div>

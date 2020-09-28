@@ -216,12 +216,28 @@ $dokka.location:dotty.dokka.tasty/ClassLikeSupport/parseTypeArgument/#/PointingT
 $dokka.location:dotty.dokka.tasty/ClassLikeSupport/parseTypeDef/#/PointingToDeclaration/dotty.dokka.tasty.ClassLikeSupport.parseTypeDef/org.jetbrains.dokka.model.DProperty/[java.lang.Object]scala3doc/dotty.dokka/tasty/-class-like-support/parse-type-def.html
 $dokka.location:dotty.dokka.tasty/ClassLikeSupport/parseValDef$default$2/#/PointingToDeclaration/dotty.dokka.tasty.ClassLikeSupport.parseValDef$default$2//[]scala3doc/dotty.dokka/tasty/-class-like-support/parse-val-def$default$2.html
 $dokka.location:dotty.dokka.tasty/ClassLikeSupport/parseValDef/#/PointingToDeclaration/dotty.dokka.tasty.ClassLikeSupport.parseValDef/org.jetbrains.dokka.model.DProperty/[java.lang.Object/scala.Boolean]scala3doc/dotty.dokka/tasty/-class-like-support/parse-val-def.html
+$dokka.location:dotty.dokka.tasty/DokkaBaseTastyInspector///PointingToDeclaration/dotty.dokka.tasty.DokkaBaseTastyInspector//[]scala3doc/dotty.dokka/tasty/-dokka-base-tasty-inspector/index.html
+$dokka.location:dotty.dokka.tasty/DokkaBaseTastyInspector/extension_mergeWith/#/PointingToDeclaration/dotty.dokka.tasty.DokkaBaseTastyInspector.extension_mergeWith/org.jetbrains.dokka.model.DPackage/[org.jetbrains.dokka.model.DPackage/org.jetbrains.dokka.model.DPackage]scala3doc/dotty.dokka/tasty/-dokka-base-tasty-inspector/extension_merge-with.html
+$dokka.location:dotty.dokka.tasty/DokkaBaseTastyInspector/processCompilationUnit/#/PointingToDeclaration/dotty.dokka.tasty.DokkaBaseTastyInspector.processCompilationUnit/scala.Unit/[scala.tasty.Reflection/java.lang.Object]scala3doc/dotty.dokka/tasty/-dokka-base-tasty-inspector/process-compilation-unit.html
+$dokka.location:dotty.dokka.tasty/DokkaBaseTastyInspector/result/#/PointingToDeclaration/dotty.dokka.tasty.DokkaBaseTastyInspector.result/scala.collection.immutable.List/[]scala3doc/dotty.dokka/tasty/-dokka-base-tasty-inspector/result.html
 $dokka.location:dotty.dokka.tasty/DokkaTastyInspector///PointingToDeclaration/dotty.dokka.tasty.DokkaTastyInspector//[]scala3doc/dotty.dokka/tasty/-dokka-tasty-inspector/index.html
-$dokka.location:dotty.dokka.tasty/DokkaTastyInspector/extension_mergeWith/#/PointingToDeclaration/dotty.dokka.tasty.DokkaTastyInspector.extension_mergeWith/org.jetbrains.dokka.model.DPackage/[org.jetbrains.dokka.model.DPackage/org.jetbrains.dokka.model.DPackage]scala3doc/dotty.dokka/tasty/-dokka-tasty-inspector/extension_merge-with.html
-$dokka.location:dotty.dokka.tasty/DokkaTastyInspector/result/#/PointingToDeclaration/dotty.dokka.tasty.DokkaTastyInspector.result/scala.collection.immutable.List/[]scala3doc/dotty.dokka/tasty/-dokka-tasty-inspector/result.html
 $dokka.location:dotty.dokka.tasty/PackageSupport///PointingToDeclaration/dotty.dokka.tasty.PackageSupport//[]scala3doc/dotty.dokka/tasty/-package-support/index.html
 $dokka.location:dotty.dokka.tasty/PackageSupport/parsePackage/#/PointingToDeclaration/dotty.dokka.tasty.PackageSupport.parsePackage/org.jetbrains.dokka.model.DPackage/[java.lang.Object]scala3doc/dotty.dokka/tasty/-package-support/parse-package.html
 $dokka.location:dotty.dokka.tasty/PackageSupport/parsePackageObject/#/PointingToDeclaration/dotty.dokka.tasty.PackageSupport.parsePackageObject/org.jetbrains.dokka.model.DPackage/[java.lang.Object]scala3doc/dotty.dokka/tasty/-package-support/parse-package-object.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector///PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.InspectorDriver//[]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-inspector-driver/index.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector///PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.TastyFromClass//[]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-tasty-from-class/index.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector///PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.TastyInspectorPhase//[]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-tasty-inspector-phase/index.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector///PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector//[]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/index.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector/backendPhases/#/PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.TastyFromClass.backendPhases//[]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-tasty-from-class/backend-phases.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector/frontendPhases/#/PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.TastyFromClass.frontendPhases//[]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-tasty-from-class/frontend-phases.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector/newCompiler/#/PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.InspectorDriver.newCompiler/dotty.tools.dotc.Compiler/[dotty.tools.dotc.core.Contexts$.Context]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-inspector-driver/new-compiler.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector/newRun/#/PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.TastyFromClass.newRun/dotty.tools.dotc.Run/[dotty.tools.dotc.core.Contexts$.Context]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-tasty-from-class/new-run.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector/phaseName/#/PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.TastyInspectorPhase.phaseName//[]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-tasty-inspector-phase/phase-name.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector/picklerPhases/#/PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.TastyFromClass.picklerPhases//[]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-tasty-from-class/pickler-phases.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector/run/#/PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.InspectorDriver.run/scala.Unit/[scala.collection.immutable.List/dotty.tools.dotc.core.Contexts$.Context]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-inspector-driver/run.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector/run/#/PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.TastyInspectorPhase.run/scala.Unit/[dotty.tools.dotc.core.Contexts$.Context]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-tasty-inspector-phase/run.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector/run/#/PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.run/scala.collection.immutable.List/[]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/run.html
+$dokka.location:dotty.dokka.tasty/SbtDokkaTastyInspector/transformPhases/#/PointingToDeclaration/dotty.dokka.tasty.SbtDokkaTastyInspector.TastyFromClass.transformPhases//[]scala3doc/dotty.dokka/tasty/-sbt-dokka-tasty-inspector/-tasty-from-class/transform-phases.html
 $dokka.location:dotty.dokka.tasty/ScaladocSupport///PointingToDeclaration/dotty.dokka.tasty.ScaladocSupport//[]scala3doc/dotty.dokka/tasty/-scaladoc-support/index.html
 $dokka.location:dotty.dokka.tasty/ScaladocSupport/parseComment/#/PointingToDeclaration/dotty.dokka.tasty.ScaladocSupport.parseComment/org.jetbrains.dokka.model.doc.DocumentationNode/[java.lang.Object/java.lang.Object]scala3doc/dotty.dokka/tasty/-scaladoc-support/parse-comment.html
 $dokka.location:dotty.dokka.tasty/SymOps///PointingToDeclaration/dotty.dokka.tasty.SymOps//[]scala3doc/dotty.dokka/tasty/-sym-ops/index.html
@@ -271,6 +287,7 @@ $dokka.location:dotty.dokka/Args$///PointingToDeclaration/dotty.dokka.Args$.Comm
 $dokka.location:dotty.dokka/Args$///PointingToDeclaration/dotty.dokka.Args$//[]scala3doc/dotty.dokka/-args$/index.html
 $dokka.location:dotty.dokka/Args$/fromString/#/PointingToDeclaration/dotty.dokka.Args$.CommentSyntax$.fromString/scala.Option/[java.lang.String]scala3doc/dotty.dokka/-args$/-comment-syntax$/from-string.html
 $dokka.location:dotty.dokka/Args///PointingToDeclaration/dotty.dokka.Args//[]scala3doc/dotty.dokka/-args/index.html
+$dokka.location:dotty.dokka/BaseDocConfiguration///PointingToDeclaration/dotty.dokka.BaseDocConfiguration//[]scala3doc/dotty.dokka/-base-doc-configuration/index.html
 $dokka.location:dotty.dokka/BaseKey///PointingToDeclaration/dotty.dokka.BaseKey//[]scala3doc/dotty.dokka/-base-key/index.html
 $dokka.location:dotty.dokka/BaseKey/mergeStrategyFor/#/PointingToDeclaration/dotty.dokka.BaseKey.mergeStrategyFor/org.jetbrains.dokka.model.properties.MergeStrategy/[java.lang.Object/java.lang.Object]scala3doc/dotty.dokka/-base-key/merge-strategy-for.html
 $dokka.location:dotty.dokka/ClasslikeExtension$///PointingToDeclaration/dotty.dokka.ClasslikeExtension$//[]scala3doc/dotty.dokka/-classlike-extension$/index.html
@@ -556,6 +573,8 @@ $dokka.location:dotty.dokka/TastyDocumentableSource/getPath/#/PointingToDeclarat
 $dokka.location:dotty.dokka/VisibilityScope///PointingToDeclaration/dotty.dokka.VisibilityScope//[]scala3doc/dotty.dokka/-visibility-scope/index.html
 $dokka.location:dotty.dokka/utils$package$/getContentGroupWithParents/#/PointingToDeclaration/dotty.dokka.utils$package$.getContentGroupWithParents/scala.collection.immutable.Seq/[org.jetbrains.dokka.pages.ContentGroup/scala.Function1]scala3doc/dotty.dokka/get-content-group-with-parents.html
 $dokka.location:dotty.dokka/utils$package$/modifyContentGroup/#/PointingToDeclaration/dotty.dokka.utils$package$.modifyContentGroup/org.jetbrains.dokka.pages.ContentGroup/[scala.collection.immutable.Seq/org.jetbrains.dokka.pages.ContentGroup]scala3doc/dotty.dokka/modify-content-group.html
+$dokka.location:dotty.tools.dottydoc/Main$///PointingToDeclaration/dotty.tools.dottydoc.Main$//[]scala3doc/dotty.tools.dottydoc/-main/index.html
+$dokka.location:dotty.tools.dottydoc/Main$/process/#/PointingToDeclaration/dotty.tools.dottydoc.Main$.process/dotty.tools.dotc.reporting.Reporter/[java.lang.String[]/dotty.tools.dotc.core.Contexts$.Context]scala3doc/dotty.tools.dottydoc/-main/process.html
 $dokka.location:example.level2.level3.level4////PointingToDeclaration/scala3doc/example/level2/level3.level4/index.html
 $dokka.location:example.level2.level3.level4/ClassLevel4///PointingToDeclaration/example.level2.level3.level4.ClassLevel4//[]scala3doc/example/level2/level3.level4/-class-level4/index.html
 $dokka.location:example.level2.level3.level4/ClassLevel4/linkingToDocMethodInUserDoc/#/PointingToDeclaration/example.level2.level3.level4.ClassLevel4.linkingToDocMethodInUserDoc//[]scala3doc/example/level2/level3.level4/-class-level4/linking-to-doc-method-in-user-doc.html
@@ -865,6 +884,7 @@ classSignatureTestSource
 comments
 companionObjectSignatures
 dotty.dokka
+dotty.tools.dottydoc
 enumSignatures
 example
 extensionMethodSignatures
