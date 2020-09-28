@@ -45,9 +45,13 @@
     </ul>
     <h2 class=""><a></a> Running the project</h2>
     <p class="paragraph">Use the following commands to generate documentation for this project and for Dotty, respectively:</p>
-    <pre><code class=" language-scala" theme="idea">sbt generateSelfDocumentation<br>sbt generateDottyLibDocumentation</code></pre>
+    <div class="sample-container">
+      <pre><code class=" language-scala" theme="idea">sbt generateSelfDocumentation<br>sbt generateDottyLibDocumentation</code></pre>
+    </div>
     <p class="paragraph">To actually view the documentation, the easiest way is to run the following in project root:</p>
-    <pre><code class=" language-scala" theme="idea">cd output<br>python3 -m http.server 8080</code></pre>
+    <div class="sample-container">
+      <pre><code class=" language-scala" theme="idea">cd output<br>python3 -m http.server 8080</code></pre>
+    </div>
     <p class="paragraph">And afterwards point your browser to <code>http://localhost:8080/self</code> or <code>http://localhost:8080/stdLib</code> for this project and for Dotty documentation respectively.</p>
     <p class="paragraph">It's not strictly necessary to go through an HTTP server, but because of CORS the documentation won't work completely if you don't.</p>
     <h2 class=""><a></a> Developing</h2>
@@ -76,13 +80,21 @@
     <p class="paragraph">WARNING: As the classes mentioned above are likely to evolve, the description below might easily get out of date. In case of any discrepancies rely on the source files instead.</p>
     <p class="paragraph"><code>MultipleFileTest</code> requires that you specify the names of the files used to extract signatures, the names of directories containing corresponding TASTY files and the kinds of signatures from source files (corresponding to keywords used to declare them like <code>def</code>, <code>class</code>, <code>object</code> etc.) whose presence in the generated documentation will be checked (other signatures, when missing, will be ignored). The mentioned source files should be located directly inside <code>src/main/scala/tests</code> directory but the file names passed as parameters should contain neither this path prefix nor <code>.scala</code> suffix. The TASTY folders are expected to be located in <code>target/${dottyVersion}/classes/tests</code> (after successful compilation of the project) and similarly only their names relative to this path should be provided as tests' parameters. For <code>SingleFileTest</code> the name of the source file and the TASTY folder are expected to be the same.</p>
     <p class="paragraph">By default it's expected that all signatures from the source files will be present in the documentation but not vice versa (because the documentation can contain also inherited signatures). To validate that a signature present in the source does not exist in the documentation (because they should be hidden from users) add <code>//unexpected</code> comment after the signature in the same line. This will cause an error if a signature with the same name appears in the documentation (even if some elements of the signature are slightly different - to avoid accidentally passing tests). If the signature in the documentation is expected to slightly differ from how it's defined in the source code you can add a <code>//expected: </code> comment (also in the same line and followed by a space) followed by the expected signature. Alternatively you can use <code>/*&lt;-*/</code> and <code>/*-&gt;*/</code> as opening and closing parentheses for parts of a signature present in the source but undesired in the documentation (at least at the current stage of development), e.g.</p>
-    <pre><code class=" language-scala" theme="idea">def foo/*&lt;-*/()/*-&gt;*/: Int</code></pre>
+    <div class="sample-container">
+      <pre><code class=" language-scala" theme="idea">def foo/*&lt;-*/()/*-&gt;*/: Int</code></pre>
+    </div>
     <p class="paragraph">will make the expected signature be</p>
-    <pre><code class=" language-scala" theme="idea">def foo: Int</code></pre>
+    <div class="sample-container">
+      <pre><code class=" language-scala" theme="idea">def foo: Int</code></pre>
+    </div>
     <p class="paragraph">instead of</p>
-    <pre><code class=" language-scala" theme="idea">def foo(): Int</code></pre>
+    <div class="sample-container">
+      <pre><code class=" language-scala" theme="idea">def foo(): Int</code></pre>
+    </div>
     <p class="paragraph">Because of the way how signatures in source are parsed, they're expected to span until the end of a line (including comments except those special ones mentioned above, which change the behaviour of tests) so if a definition contains an implementation, it should be placed in a separate line, e.g.</p>
-    <pre><code class=" language-scala" theme="idea">def foo: Int<br>   = 1<br><br>class Bar<br>{<br>   //...<br>}</code></pre>
+    <div class="sample-container">
+      <pre><code class=" language-scala" theme="idea">def foo: Int<br>   = 1<br><br>class Bar<br>{<br>   //...<br>}</code></pre>
+    </div>
     <p class="paragraph">Otherwise the implementation would be treated as a part of the signature.</p>
     <h2 class=""><a></a> Roadmap</h2>
     <ol>
