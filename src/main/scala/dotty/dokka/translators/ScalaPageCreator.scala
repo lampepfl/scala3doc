@@ -132,6 +132,7 @@ class ScalaPageCreator(
 
                 }
             }
+            .documentableFilter()
             .group(styles = Set(ContentStyle.TabbedContent)) { b => b
                 .contentForScope(c)
                 .contentForEnum(c)
@@ -242,91 +243,42 @@ class ScalaPageCreator(
             }
         }
 
-        def contentForScope(
-            s: Documentable & WithScope
-        ) = {
+        def contentForScope(s: Documentable & WithScope) = 
             val (typeDefs, valDefs) = s.getProperties.asScala.toList.partition(_.get(PropertyExtension).kind == "type")
             val classes = s.getClasslikes.asScala.toList
-            val inherited = s match {
-                case c: DClass => List("Inherited" -> c.get(ClasslikeExtension).inheritedMethods)
-                case other => List.empty
-            }
-             
+            
             b
                 .contentForComments(s)
-                .divergentBlock(
-                    "Type members",
-                    List("Types" -> typeDefs, "Classlikes" -> classes),
-                    kind = ContentKind.Classlikes
-                )(
-                    (bdr, elem) => bdr.header(3, elem)()
+                .documentableTab("Type members")(
+                    DocumentableGroup(Some("Types"), typeDefs),
+                    DocumentableGroup(Some("Classlikes"), classes) // TODO kind = ContentKind.Classlikes?
                 )
-                .divergentBlock(
-                    "Methods",
-                    List(
-                        "Class methods" -> s.getFunctions.asScala.toList, 
-                    ) ++ inherited,
-                    kind = ContentKind.Functions,
-                    omitSplitterOnSingletons = false
-                )(
-                    (builder, txt) => builder.header(3, txt)()
+                .documentableTab("Methods")(
+                    DocumentableGroup(Some("Class methods"), s.getFunctions.asScala.toList),
+                    DocumentableGroup(Some("Inherited"), s match
+                        case c: DClass => c.get(ClasslikeExtension).inheritedMethods
+                        case _ => Nil
+                    )
                 )
-                .groupingBlock(
-                    "Value members",
-                    List("" -> valDefs),
-                    kind = ContentKind.Properties,
-                    sourceSets = s.getSourceSets.asScala.toSet
-                )(
-                    (bdr, group) => bdr
-                ){ (bdr, elem) => bdr
-                    .driLink(elem.getName, elem.getDri)
-                    .sourceSetDependentHint(Set(elem.getDri), elem.getSourceSets.asScala.toSet, kind = ContentKind.SourceSetDependentHint) { sbdr => sbdr
-                        .contentForBrief(elem)
-                        .signature(elem)
-                    }
-                }
-        }
+                .documentableTab("Value members")(
+                    DocumentableGroup(None, valDefs), // TODO kind = ContentKind.Properties,
+                )
     
-        def contentForEnum(
-            c: DClass
-        ) = b.groupingBlock(
-            "Enum entries",
-            List(() -> Option(c.get(EnumExtension)).fold(List.empty)(_.enumEntries.sortBy(_.getName).toList)),
-            kind = ContentKind.Properties
-        )( (bdr, splitter) => bdr ){ (bdr, elem) => bdr
-            .driLink(elem.getName, elem.getDri, kind = ContentKind.Main)
-            .sourceSetDependentHint(
-                dri = Set(elem.getDri), 
-                sourceSets = elem.getSourceSets.asScala.toSet, 
-                kind = ContentKind.SourceSetDependentHint
-            ){ srcsetbdr => srcsetbdr
-                .contentForBrief(elem)
-                .signature(elem)
-            }
-        }
+        def contentForEnum(c: DClass) = 
+            b.documentableTab("Enum entries")(
+                DocumentableGroup(None, Option(c.get(EnumExtension)).fold(List.empty)(_.enumEntries.sortBy(_.getName).toList)), 
+            )
+        
 
-        def contentForGivens(c: DClass) = {
-            val givens = c.get(ClasslikeExtension).givens
+        def contentForGivens(c: DClass) = 
+            b.documentableTab("Given")(
+                DocumentableGroup(None, c.get(ClasslikeExtension).givens.sortBy(_.getName).toList), 
+            )
+        
+
+
+        def contentForExtensions(c: DClass) = 
             b.groupingBlock(
-                "Given",
-                if(!givens.isEmpty) List(() -> givens.sortBy(_.getName).toList) else List.empty,
-                kind = ContentKind.Functions
-            )( (bdr, splitter) => bdr ){ (bdr, elem) => bdr
-                .driLink(elem.getName, elem.getDri, kind = ContentKind.Main)
-                .sourceSetDependentHint(
-                    dri = Set(elem.getDri), 
-                    sourceSets = elem.getSourceSets.asScala.toSet, 
-                    kind = ContentKind.SourceSetDependentHint
-                ){ srcsetbdr => srcsetbdr
-                    .contentForBrief(elem)
-                    .signature(elem)
-                }
-            }
-        }
-
-        def contentForExtensions(
-            c: DClass
-        ) = b.groupingBlock(
             "Extensions",
             c.get(ClasslikeExtension).extensions.map(e => e.extendedSymbol -> e.extensions).sortBy(_._2.size),
             kind = ContentKind.Extensions
@@ -346,25 +298,11 @@ class ScalaPageCreator(
             }
         }
 
-        def contentForConstructors(
-            c: DClass
-        ) = b.groupingBlock(
-            "Constructors",
-            List("" -> c.getConstructors.asScala.toList),
-            kind = ContentKind.Constructors
-        )(
-            (bdr, group) => bdr
-        ){ (bdr, elem) => bdr
-            .driLink(elem.getName, elem.getDri)
-            .sourceSetDependentHint(
-                Set(elem.getDri),
-                elem.getSourceSets.asScala.toSet,
-                kind = ContentKind.SourceSetDependentHint
-            ) { sbdr => sbdr
-                .contentForBrief(elem)
-                .signature(elem)
-            }
-        }
+        def contentForConstructors(c: DClass) = 
+             b.documentableTab("Constructors")(
+                DocumentableGroup(None, c.getConstructors.asScala.toList)
+            )
+        
 
         def contentForTypesInfo(c: DClass) = {
             val inheritanceInfo = c.get(InheritanceInfo)

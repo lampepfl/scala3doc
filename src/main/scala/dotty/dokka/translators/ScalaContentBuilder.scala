@@ -17,6 +17,8 @@ import org.jetbrains.dokka.model.properties.PropertyContainer
 import org.jetbrains.dokka.model.doc._
 
 
+case class DocumentableGroup(name: Option[String], documenables: Seq[Documentable])    
+
 class ScalaPageContentBuilder(
     val commentsConverter: CommentsToContentConverter,
     val signatureProvider: SignatureProvider,
@@ -440,6 +442,36 @@ class ScalaPageContentBuilder(
                 contentForDRIs(dri, sourceSets, kind, styles, extra, buildBlock),
                 sourceSets.toDisplay
             )
+        )
+
+        type Self = ScalaPageContentBuilder#ScalaDocumentableContentBuilder
+
+        def documentableTab(name: String)(children: DocumentableGroup*): Self = 
+            def documentableElement(documentable: Documentable): DocumentableElement = 
+                DocumentableElement("public", 
+                    "def", 
+                    documentable.getName, 
+                    ": String", 
+                    asParams(documentable.getDri)
+                )                
+
+            if (children.forall(_.documenables.isEmpty)) this else
+                    header(3, name, mainKind,mainSourcesetData, mainStyles, mainExtra plus SimpleAttr.Companion.header(name))()
+                    .group(styles = Set(ContentStyle.WithExtraAttributes), extra = mainExtra plus SimpleAttr.Companion.header(name)){ bdr =>
+                        children.foldLeft(bdr){ (bdr, list) =>
+                            bdr.addChild(DocumentableList(list.name, list.documenables.map(documentableElement), asParams(mainDRI)))
+                        }
+            }
+
+        def documentableFilter() = addChild(DocumentableFilter(asParams(mainDRI)))    
+
+        def asParams(dri: DRI): ContentNodeParams = asParams(Set(dri))
+
+        def asParams(dri: Set[DRI]): ContentNodeParams = ContentNodeParams(
+            new DCI(dri.asJava, mainKind),
+            mainSourcesetData.toDisplay,
+            mainStyles,
+            mainExtra
         )
 
         def divergentBlock[A, T <: Documentable, G <: List[(A, List[T])]](

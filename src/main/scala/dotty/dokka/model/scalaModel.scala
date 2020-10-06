@@ -61,3 +61,45 @@ case class HtmlContentNode(
   override def getChildren: JList[ContentNode] = Nil.asJava
   override def getExtra = extra
   override def withNewExtras(p: PropertyContainer[ContentNode]) = copy(extra = p)
+
+
+case class ContentNodeParams(
+  val dci: DCI, 
+  val sourceSets: java.util.Set[DisplaySourceSet], 
+  val style: Set[Style],
+  val extra: PropertyContainer[ContentNode] = PropertyContainer.Companion.empty
+)
+
+abstract class ScalaContentNode(params: ContentNodeParams) extends ContentNode:
+  def newInstance(params: ContentNodeParams): ScalaContentNode
+
+  override def getDci = params.dci
+  override def getSourceSets = params.sourceSets
+  override def getStyle = params.style.asJava
+  override def hasAnyContent = true
+  def withSourceSets(sourceSets: JSet[DisplaySourceSet]) = 
+    newInstance(params.copy(sourceSets = sourceSets))
+  override def getChildren: JList[ContentNode] = Nil.asJava
+  override def getExtra = params.extra
+  override def withNewExtras(p: PropertyContainer[ContentNode]) = newInstance(params.copy(extra = p))
+   
+case class DocumentableElement(
+  modifiers: String,
+  kind: String,
+  name: String,
+  signature: String,
+  params: ContentNodeParams
+) extends ScalaContentNode(params):
+  override def newInstance(params: ContentNodeParams) = copy(params = params)
+
+case class DocumentableList(
+  name: Option[String],
+  elements: Seq[DocumentableElement], 
+  params: ContentNodeParams
+) extends ScalaContentNode(params):
+  override def newInstance(params: ContentNodeParams) = copy(params = params)
+  override def hasAnyContent = elements.nonEmpty
+  override def getChildren: JList[ContentNode] = elements.asJava
+
+case class DocumentableFilter(params: ContentNodeParams) extends ScalaContentNode(params):
+  override def newInstance(params: ContentNodeParams) = copy(params = params)
