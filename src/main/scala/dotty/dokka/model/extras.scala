@@ -52,7 +52,6 @@ case class EnumExtension(val enumEntries: Seq[Documentable]) extends ExtraProper
 object EnumExtension extends BaseKey[DClass, EnumExtension]
 
 
-
 case class ExtensionGroup(val extendedSymbol: DParameter, val extensions: List[DFunction])
 
 enum Kind(val name: String){
@@ -89,6 +88,15 @@ case class InheritanceInfo(
   override def getKey = InheritanceInfo
 
 object InheritanceInfo extends BaseKey[DClasslike, InheritanceInfo]  
+
+enum OriginInfo extends ExtraProperty[Documentable]:
+  case InheritedFrom(name: String, dri: DRI)
+  case ImplicitlyAddedBy(name: String, dri: DRI)
+  case ExtensionFrom(name: String, dri: DRI)
+
+  override def getKey = OriginInfo
+
+object OriginInfo extends BaseKey[Documentable, OriginInfo]  
 
 case class PropertyExtension(kind: "val" | "var" | "type", isAbstract: Boolean) extends ExtraProperty[DProperty]:
   override def getKey = PropertyExtension

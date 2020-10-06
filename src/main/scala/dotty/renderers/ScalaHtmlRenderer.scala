@@ -15,6 +15,7 @@ import java.util.{List => JList, Set => JSet}
 import kotlinx.html.FlowContent
 import kotlinx.html.stream.StreamKt
 import kotlinx.html.Gen_consumer_tagsKt
+import org.jetbrains.dokka.links.DRI
 
 class ScalaHtmlRenderer(ctx: DokkaContext) extends SiteRenderer(ctx) {
 
@@ -38,7 +39,9 @@ class ScalaHtmlRenderer(ctx: DokkaContext) extends SiteRenderer(ctx) {
     override def buildContentNode(f: FlowContent, node: ContentNode, pageContext: ContentPage, sourceSetRestriciton: JSet[DisplaySourceSet]) = {
         node match {
             case n: HtmlContentNode => withHtml(f, raw(n.body).toString)
-            case n: DocumentableList => withHtml(f, buildDocumentableList(n).toString())
+            case n: DocumentableList => 
+                val ss = if sourceSetRestriciton == null then Set.empty.asJava else sourceSetRestriciton
+                withHtml(f, buildDocumentableList(n, pageContext, ss).toString())
             case n: DocumentableFilter => withHtml(f, div(`class` := "documentableFilter")("filter instance here").toString)
             case other => super.buildContentNode(f, node, pageContext, sourceSetRestriciton)
         }
@@ -47,31 +50,37 @@ class ScalaHtmlRenderer(ctx: DokkaContext) extends SiteRenderer(ctx) {
     private val clazz = `class`
 
     private val anchor = raw("""
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="darkgray" xmlns="http://www.w3.org/2000/svg">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="darkgray" xmlns="http://www.w3.org/2000/svg">
             <path d="M21.2496 5.3C20.3496 4.5 19.2496 4 18.0496 4C16.8496 4 15.6496 4.5 14.8496 5.3L10.3496 9.8L11.7496 11.2L16.2496 6.7C17.2496 5.7 18.8496 5.7 19.8496 6.7C20.8496 7.7 20.8496 9.3 19.8496 10.3L15.3496 14.8L16.7496 16.2L21.2496 11.7C22.1496 10.8 22.5496 9.7 22.5496 8.5C22.5496 7.3 22.1496 6.2 21.2496 5.3Z"></path>
             <path d="M8.35 16.7998C7.35 17.7998 5.75 17.7998 4.75 16.7998C3.75 15.7998 3.75 14.1998 4.75 13.1998L9.25 8.6998L7.85 7.2998L3.35 11.7998C1.55 13.5998 1.55 16.3998 3.35 18.1998C4.25 19.0998 5.35 19.4998 6.55 19.4998C7.75 19.4998 8.85 19.0998 9.75 18.1998L14.25 13.6998L12.85 12.2998L8.35 16.7998Z"></path>
         </svg>
     """)
 
-    private def buildDocumentableList(n: DocumentableList) = div(clazz:="documentableList")(
-        n.name.fold(raw(""))(h3(clazz := "documentableHeader")(_)),
-        n.elements.map { element =>
-            def topLevelAttr = Seq(clazz := "documentableElement") ++ Seq(attr("data-ala") := "ola")
-            val pageAddress = "TODO"
-            div(topLevelAttr)(
-                div(clazz := "symbol monospace")(  
-                    a(href:=pageAddress, clazz := "documentableAnchor")(anchor),
-                    span(clazz := "all_modifiers")(
-                        span(clazz := "modifiers")(element.modifiers),
-                        span(clazz := "kind")(" ", element.kind, " ")
-                    ),
-                    a(clazz := "symbol", href := pageAddress)(element.name),
-                    span(clazz := "signature")(element.signature)
-                ),
-                div(clazz := "brief")(raw("TODO use dokka"))
-            )
-        }
-    )
+    private def buildDocumentableList(n: DocumentableList, pageContext: ContentPage, sourceSetRestriciton: JSet[DisplaySourceSet]) = 
+        def render(n: ContentNode) = raw(buildWithKotlinx(n, pageContext, null)) 
+
+        def link(dri: DRI): String = getLocationProvider.resolve(dri, sourceSetRestriciton, pageContext) match
+            case null => ""
+            case link => link
+
+        def renderElement(e: String | (String, DRI)) = e match
+            case (name, dri) =>  a(href := link(dri))(name)
+            case name: String => raw(name)
+
+        div(clazz := "documentableList")(
+            if(n.groupName.isEmpty) raw("") else h3(clazz := "documentableHeader")(n.groupName.map(renderElement)),
+            n.elements.map { element =>
+                def topLevelAttr = Seq(clazz := "documentableElement") ++ element.attributes.map{ case (n, v) => attr(s"data-f-$n") := v }
+ 
+                div(topLevelAttr:_*)(
+                    a(href:=link(element.params.dri), clazz := "documentableAnchor")(anchor),
+                    span(clazz := "modifiers monospace")(element.modifiers.map(renderElement)),
+                    a(clazz := "documentableName monospace", href := link(element.params.dri) )(element.name),
+                    span(clazz := "signature monospace")(element.signature.map(renderElement)),
+                    div(clazz := "documentableBrief")(element.brief.map(render)),
+                )
+            }
+        )
 
     def buildDescriptionList(node: ContentTable, pageContext: ContentPage, sourceSetRestriciton: JSet[DisplaySourceSet]) = {
         val children = node.getChildren.asScala.toList.zipWithIndex

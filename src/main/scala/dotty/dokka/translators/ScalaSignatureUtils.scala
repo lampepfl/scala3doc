@@ -8,36 +8,49 @@ import org.jetbrains.dokka.model.properties.WithExtraProperties
 import org.jetbrains.dokka.pages._
 import collection.JavaConverters._
 
-trait ScalaSignatureUtils:
-    private val ignoreRules: List[(AnnotationsInfo.Annotation) => Boolean] = List(
-        a => a.dri.getPackageName.startsWith("scala.annotation.internal")
-    )
+type InlineContent = String | (String, DRI)
 
-    extension (tokens: Seq[String]) def toSignatureString(): String =
-        tokens.filter(_.trim.nonEmpty).mkString(""," "," ")
+case class InlineSignatureBuilder(names: Seq[InlineContent] = Nil, preName: Seq[InlineContent] = Nil) extends SignatureBuilder:
+    override def text(str: String): SignatureBuilder = copy(names = str +: names)
+    override def name(str: String, dri: DRI): SignatureBuilder = copy(names = Nil, preName = names)
+    override def driLink(text: String, dri: DRI): SignatureBuilder = copy(names = (text, dri) +: names)
+    override def group(styles: Any = "", kind: Any = "")(op: SignatureBuilder => SignatureBuilder): SignatureBuilder = op(this)
 
-    extension [T <: Documentable] (d: T) def annotations() = (d match {
-        case e: WithExtraProperties[T] => e.get(AnnotationsInfo).annotations
-        case _ => List.empty
-    }).filterNot(annotation => ignoreRules.exists(ignoreFun => ignoreFun(annotation)))
+trait SignatureBuilder extends ScalaSignatureUtils {
+    def text(str: String): SignatureBuilder
+    def name(str: String, dri: DRI) = driLink(str, dri)
+    def driLink(text: String, dri: DRI): SignatureBuilder
+    def group(styles: Any = "", kind: Any = "")(op: SignatureBuilder => SignatureBuilder): SignatureBuilder
 
-    extension [T <: Documentable](builder: ScalaPageContentBuilder#ScalaDocumentableContentBuilder):
-        def annotationsBlock(d: Documentable): ScalaPageContentBuilder#ScalaDocumentableContentBuilder = builder
-            .group(styles = Set(TextStyle.Block), kind = ContentKind.Annotations){ bdr => 
+     def list[E](
+            elements: List[E],
+            prefix: String = "",
+            suffix: String = "",
+            separator: String = ", ",
+        )(
+            elemOp: (SignatureBuilder, E) => SignatureBuilder
+        ): SignatureBuilder = elements match {
+            case Nil => this
+            case head +: tail =>
+                tail.foldLeft(elemOp(text(prefix), head))((b, e) => elemOp(b.text(separator), e)).text(suffix)
+        }
+
+    def annotationsBlock(d: Documentable): SignatureBuilder = 
+            group(styles = Set(TextStyle.Block), kind = ContentKind.Annotations){ bdr => 
                 d.annotations().foldLeft(bdr){ (bdr, annotation) => bdr
                     .buildAnnotation(annotation)
                 }
             }
         
-        def annotationsInline(d: Documentable): ScalaPageContentBuilder#ScalaDocumentableContentBuilder = builder
-            .group(styles = Set(TextStyle.Span), kind = ContentKind.Annotations){ bdr => 
+        def annotationsInline(d: Documentable): SignatureBuilder =
+            group(styles = Set(TextStyle.Span), kind = ContentKind.Annotations){ bdr => 
                 d.annotations().foldLeft(bdr){ (bdr, annotation) => bdr
                     .buildAnnotation(annotation)
                 }
             }
 
-        private def buildAnnotation(a: AnnotationsInfo.Annotation): ScalaPageContentBuilder#ScalaDocumentableContentBuilder = builder
-            .group(){ bdr => bdr
+        private def buildAnnotation(a: AnnotationsInfo.Annotation): SignatureBuilder = 
+            group(){ bdr => bdr
                 .text("@")
                 .driLink(a.dri.getClassNames, a.dri)
                 .buildAnnotationParams(a)
@@ -45,33 +58,30 @@ trait ScalaSignatureUtils:
             }
 
 
-        private def buildAnnotationParams(a: AnnotationsInfo.Annotation): ScalaPageContentBuilder#ScalaDocumentableContentBuilder = 
-            if !a.params.isEmpty then builder
-                .group(styles = Set(TextStyle.BreakableAfter)){ bdr => bdr
+        private def buildAnnotationParams(a: AnnotationsInfo.Annotation): SignatureBuilder = 
+            if !a.params.isEmpty then 
+                group(styles = Set(TextStyle.BreakableAfter)){ bdr => bdr
                     .list(a.params, "(", ")", ", "){ (bdr, param) => bdr
                         .buildAnnotationParameter(param)
                     }
                 }
-            else builder
+            else this
 
-        private def addParameterName(txt: Option[String]): ScalaPageContentBuilder#ScalaDocumentableContentBuilder = txt match {
-                case Some(name) => builder.text(s"$txt = ")
-                case _ => builder
+        private def addParameterName(txt: Option[String]): SignatureBuilder = txt match {
+                case Some(name) => this.text(s"$txt = ")
+                case _ => this
             }
 
-        private def buildAnnotationParameter(a: AnnotationsInfo.AnnotationParameter): ScalaPageContentBuilder#ScalaDocumentableContentBuilder = a match {
-            case AnnotationsInfo.PrimitiveParameter(name, value) => builder
-                .addParameterName(name)
-                .text(value)
-            case AnnotationsInfo.LinkParameter(name, dri, text) => builder
-                .addParameterName(name)
-                .driLink(text, dri)
-            case AnnotationsInfo.UnresolvedParameter(name, value) => builder
-                .addParameterName(name)
-                .text(value)
+        private def buildAnnotationParameter(a: AnnotationsInfo.AnnotationParameter): SignatureBuilder = a match {
+            case AnnotationsInfo.PrimitiveParameter(name, value) => 
+                addParameterName(name).text(value)
+            case AnnotationsInfo.LinkParameter(name, dri, text) => 
+                addParameterName(name).driLink(text, dri)
+            case AnnotationsInfo.UnresolvedParameter(name, value) => 
+                addParameterName(name).text(value)
         }
 
-        def modifiersAndVisibility(t: WithAbstraction with WithVisibility with WithExtraProperties[T], kind: String) =
+        def modifiersAndVisibility(t: WithAbstraction with WithVisibility with WithExtraProperties[_], kind: String) =
             import org.jetbrains.dokka.model.properties._
             val extras = t.getExtra.getMap()
             val additionalModifiers =
@@ -94,8 +104,7 @@ trait ScalaSignatureUtils:
                 .getOrElse("")
 
 
-            builder
-                .text(
+            text(
                     Seq(
                         prefixes.trim,
                         visibilityModifier, 
@@ -105,9 +114,9 @@ trait ScalaSignatureUtils:
                     ).toSignatureString()
                 )
 
-        def typeSignature(b: Projection): ScalaPageContentBuilder#ScalaDocumentableContentBuilder = b match {
+        def typeSignature(b: Projection): SignatureBuilder = b match {
             case tc: TypeConstructor =>
-                tc.getProjections.asScala.foldLeft(builder) { (bdr, elem) => elem match {
+                tc.getProjections.asScala.foldLeft(this) { (bdr, elem) => elem match {
                     case text: UnresolvedBound => bdr.text(text.getName)
                     case link: TypeParameter => 
                         bdr.driLink(link.getName, link.getDri)
@@ -116,10 +125,10 @@ trait ScalaSignatureUtils:
                 }
             }
             case other =>
-                builder.text(s"TODO: $other")
+                text(s"TODO: $other")
         }
 
-        def generics(on: WithGenerics) = builder.list(on.getGenerics.asScala.toList, "[", "]"){ (bdr, e) => 
+        def generics(on: WithGenerics) = list(on.getGenerics.asScala.toList, "[", "]"){ (bdr, e) => 
             val bldr = bdr.text(e.getName)
             e.getBounds.asScala.foldLeft(bldr)( (b, bound) => b.typeSignature(bound))
         }
@@ -128,7 +137,7 @@ trait ScalaSignatureUtils:
             val methodExtension = method.get(MethodExtension)
             val receiverPos = if method.isRightAssociative() then method.get(MethodExtension).parametersListSizes(0) else 0
             val paramLists = methodExtension.parametersListSizes
-            val (bldr, index) = paramLists.foldLeft(builder, 0){
+            val (bldr, index) = paramLists.foldLeft(this, 0){
                 case ((builder, from), size) =>
                     val toIndex = from + size
                     if from == toIndex then (builder.text("()"), toIndex)
@@ -143,15 +152,30 @@ trait ScalaSignatureUtils:
                     else (builder, toIndex)
             }
             bldr
+}
+
+trait ScalaSignatureUtils:
+    val ignoreRules: List[(AnnotationsInfo.Annotation) => Boolean] = List(
+        a => a.dri.getPackageName.startsWith("scala.annotation.internal")
+    )
+
+    extension (tokens: Seq[String]) def toSignatureString(): String =
+        tokens.filter(_.trim.nonEmpty).mkString(""," "," ")
+
+    extension [T <: Documentable] (d: T) def annotations() = (d match {
+        case e: WithExtraProperties[T] => e.get(AnnotationsInfo).annotations
+        case _ => List.empty
+    }).filterNot(annotation => ignoreRules.exists(ignoreFun => ignoreFun(annotation)))
+        
 
             
-    private def visibilityToString(visibility: ScalaVisibility) = visibility match {
+    def visibilityToString(visibility: ScalaVisibility) = visibility match {
         case ScalaVisibility.Unrestricted => ""
         case ScalaVisibility.Protected(scope) => s"protected${visibilityScopeToString(scope)}"
         case ScalaVisibility.Private(scope) => s"private${visibilityScopeToString(scope)}"
     }
 
-    private def visibilityScopeToString(scope: VisibilityScope) = 
+    def visibilityScopeToString(scope: VisibilityScope) = 
         import VisibilityScope._
 
         scope match
@@ -160,6 +184,4 @@ trait ScalaSignatureUtils:
             case ExplicitModuleScope(name) => s"[$name]"
             case ThisScope => "[this]"
 
-
-    
     

@@ -246,6 +246,8 @@ class ScalaPageCreator(
         def contentForScope(s: Documentable & WithScope) = 
             val (typeDefs, valDefs) = s.getProperties.asScala.toList.partition(_.get(PropertyExtension).kind == "type")
             val classes = s.getClasslikes.asScala.toList
+
+            val (inherited, defined) = s.getFunctions.asScala.toList.partition(OriginInfo.definedIn)
             
             b
                 .contentForComments(s)
@@ -278,25 +280,10 @@ class ScalaPageCreator(
 
 
         def contentForExtensions(c: DClass) = 
-            b.groupingBlock(
-            "Extensions",
-            c.get(ClasslikeExtension).extensions.map(e => e.extendedSymbol -> e.extensions).sortBy(_._2.size),
-            kind = ContentKind.Extensions
-        )( (bdr, receiver) => bdr 
-            .group(){ grpbdr => grpbdr
-                .signature(receiver)
-            }
-        ){ (bdr, elem) => bdr
-            .driLink(elem.getName, elem.getDri, kind = ContentKind.Main)
-            .sourceSetDependentHint(
-                dri = Set(elem.getDri), 
-                sourceSets = elem.getSourceSets.asScala.toSet, 
-                kind = ContentKind.SourceSetDependentHint
-            ){ srcsetbdr => srcsetbdr
-                .contentForBrief(elem)
-                .signature(elem)
-            }
-        }
+            val (single, groups) = c.get(ClasslikeExtension).extensions.partition(_.extensions.size == 1)
+            val groupsHtml = groups.map(g => DocumentableGroup(Some(g.extendedSymbol), g.extensions))
+            val singlesHtml = DocumentableGroup(None, single.flatMap(_.extensions))
+            b.documentableTab("Extensions")((singlesHtml +: groupsHtml):_*)
 
         def contentForConstructors(c: DClass) = 
              b.documentableTab("Constructors")(

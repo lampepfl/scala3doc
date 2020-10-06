@@ -1,5 +1,24 @@
 package tests
 
+trait FilterTestBaseTrait:
+     /** doc */
+    protected def protectetDefInheriteTrait(a: Int): String = ???
+    /** doc */
+    private def privateDefInheritedTrait(a: Int): String = ???
+    /** doc */
+    def publicDefInheritedTrait(a: Int): String = ???
+    
+    /** doc */
+    object PublicObjectInheritedTrait
+    /** doc */
+    protected object ProtectedObjectInheritedTrait
+
+    /** doc */
+    protected val protectetValInheritedTrait = 123
+    /** doc */
+    private val privateValInheritedTrait = 344
+    /** doc */
+    val publicValInheritedTrait = 567
 
 class FilterTestBase:
     /** doc */
@@ -50,7 +69,7 @@ class FilterTestBase:
     /** doc */
     given namedMap as Map[String, Double] = Map.empty
 
-class FilterTest extends FilterTestBase:
+class FilterTest extends FilterTestBase with FilterTestBaseTrait:
     /** doc */
     sealed abstract class B
     /** doc */
@@ -70,11 +89,11 @@ class FilterTest extends FilterTestBase:
     protected object ProtectedObject
     
     /** doc */
-    protected def protectetDef(a: Int): String = ???
+    protected def protectetDef(a: B): String = ???
     /** doc */
-    private def privateDef(a: Int): String = ???
+    private def privateDef(a: C): String = ???
     /** doc */
-    def publicDef(a: Int): String = ???
+    def publicDef(a: D): FilterTest = ???
     
 
     /** doc */
@@ -100,3 +119,9 @@ class FilterTest extends FilterTestBase:
     given namedList as List[String] = "ula" :: Nil
     /** doc */
     protected given namedSeq as Seq[String | Int | Double] = List(1)
+
+extension (e: FilterTest):
+    def extensionMethod(name: FilterTest): FilterTest = ???
+
+extension (e: FilterTestBase):
+    def extensionMethodBase(name: FilterTest): FilterTest = ???    

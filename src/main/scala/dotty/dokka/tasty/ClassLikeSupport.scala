@@ -54,7 +54,7 @@ trait ClassLikeSupport:
               kind,
               classDef.getCompanion,
               classDef.getExtensionGroups,
-              classDef.getInheritedMethods.map(parseMethod(_)),
+              classDef.getInheritedMethods.map(m => parseMethod(m, isInherited = true)),
               classDef.getGivenMethods ++ classDef.getGivenFields
             ))
             .plus(AdditionalModifiers(sourceSet.asMap(classDef.symbol.getExtraModifiers().asJava)))
@@ -213,7 +213,8 @@ trait ClassLikeSupport:
       emptyParamsList: Boolean = false,
       paramPrefix: Symbol => String = _ => "",
       extInfo: Option[ExtensionInformation] = None,
-      isGiven: Boolean = false
+      isGiven: Boolean = false,
+      isInherited: Boolean = false
     ): DFunction =
     val annotations = AnnotationsInfo(methodSymbol.getAnnotations())
     val method = methodSymbol.tree.asInstanceOf[DefDef]
@@ -252,8 +253,13 @@ trait ClassLikeSupport:
         case _ => Some(method.returnTpt.dokkaType)
       }.flatten
     }
-    val optionalExtras = Seq(Option.when(isGiven)(IsGiven(getGivenInstance))).flatten
-
+    val optionalExtras = Seq(
+        Option.when(isGiven)(IsGiven(getGivenInstance)),
+        Option.when(isInherited){
+          val owner = methodSymbol.owner
+          OriginInfo.InheritedFrom(owner.name, owner.dri)
+        }
+      ).flatten
 
     new DFunction(
       methodSymbol.dri,

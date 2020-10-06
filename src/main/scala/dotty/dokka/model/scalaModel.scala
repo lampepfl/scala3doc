@@ -68,7 +68,8 @@ case class ContentNodeParams(
   val sourceSets: java.util.Set[DisplaySourceSet], 
   val style: Set[Style],
   val extra: PropertyContainer[ContentNode] = PropertyContainer.Companion.empty
-)
+):
+  def dri = dci.getDri.asScala.head
 
 abstract class ScalaContentNode(params: ContentNodeParams) extends ContentNode:
   def newInstance(params: ContentNodeParams): ScalaContentNode
@@ -84,16 +85,17 @@ abstract class ScalaContentNode(params: ContentNodeParams) extends ContentNode:
   override def withNewExtras(p: PropertyContainer[ContentNode]) = newInstance(params.copy(extra = p))
    
 case class DocumentableElement(
-  modifiers: String,
-  kind: String,
+  modifiers: Seq[String | (String, DRI)],
   name: String,
-  signature: String,
+  signature: Seq[String | (String, DRI)],
+  brief: Seq[ContentNode],
+  attributes: Map[String, String],
   params: ContentNodeParams
 ) extends ScalaContentNode(params):
   override def newInstance(params: ContentNodeParams) = copy(params = params)
 
 case class DocumentableList(
-  name: Option[String],
+  groupName: Seq[String | (String, DRI)],
   elements: Seq[DocumentableElement], 
   params: ContentNodeParams
 ) extends ScalaContentNode(params):

@@ -32,6 +32,16 @@ class BaseKey[T, V] extends ExtraProperty.Key[T, V]:
   override def mergeStrategyFor(left: V, right: V): MergeStrategy[T] = 
     MergeStrategy.Remove.INSTANCE.asInstanceOf[MergeStrategy[T]]
 
+  def definedIn(e: T with WithExtraProperties[_]): Boolean = e match
+    case e: WithExtraProperties[_] => e.getExtra.getMap.containsKey(this)
+    case _ => false
+
+  
+  def getFrom(e: T): Option[V] = e match
+    case e: WithExtraProperties[_] => Option(e.getExtra.getMap.get(this)).asInstanceOf[Option[V]]
+    case _ => None    
+  
+
 extension (f: DFunction):
   def isRightAssociative(): Boolean = f.getName.endsWith(":")
   def getExtendedSymbol(): Option[DParameter] = Option.when(f.get(MethodExtension).extensionInfo.isDefined)(

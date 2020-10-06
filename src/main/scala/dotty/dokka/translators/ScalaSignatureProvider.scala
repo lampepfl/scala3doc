@@ -13,6 +13,7 @@ import org.jetbrains.dokka.model.properties.PropertyContainer
 import dokka.java.api._
 import java.util.function.Consumer
 import kotlin.jvm.functions.Function2
+import org.jetbrains.dokka.links.DRI
 
 class ScalaSignatureProvider(contentConverter: CommentsToContentConverter, logger: DokkaLogger) extends SignatureProvider with ScalaSignatureUtils:
     private val default = new KotlinSignatureProvider(contentConverter, logger)
@@ -24,53 +25,66 @@ class ScalaSignatureProvider(contentConverter: CommentsToContentConverter, logge
     ) = contentBuilder.contentForDocumentable(d, kind = ContentKind.Symbol, styles = styles, buildBlock = func)
 
 
-    override def signature(documentable: Documentable) = documentable match {
-        case extension: DFunction if extension.get(MethodExtension).extensionInfo.isDefined =>
-            JList(extensionSignature(extension))
-        case method: DFunction if method.get(IsGiven) != null =>
-            JList(givenMethodSignature(method))
-        case method: DFunction =>
-            JList(methodSignature(method))
-        case enumEntry: DClass if enumEntry.get(IsEnumEntry) != null => 
-            JList(enumEntrySignature(enumEntry))
-        case clazz: DClass =>
-            JList(classSignature(clazz))
-        case enumProperty: DProperty if enumProperty.get(IsEnumEntry) != null => 
-            JList(enumPropertySignature(enumProperty))
-        case property: DProperty =>
-            JList(propertySignature(property))
-        case parameter: DParameter =>
-            JList(parameterSignature(parameter))
-        case _ => default.signature(documentable)
+    case class ContentNodeBuilder(builder: ScalaPageContentBuilder#ScalaDocumentableContentBuilder) extends SignatureBuilder{
+        def text(str: String): SignatureBuilder = ContentNodeBuilder(builder.text(str))
+        def driLink(text: String, dri: DRI): SignatureBuilder = ContentNodeBuilder(builder.driLink(text, dri))
+        def group(styles: Any = "", kind: Any = "")(op: SignatureBuilder => SignatureBuilder): SignatureBuilder =
+            this // TODO
     }
 
+    override def signature(documentable: Documentable) = 
+        JList(signatureContent(documentable){ builder => 
+        val res = ScalaSignatureProvider.rawSignature(documentable, ContentNodeBuilder(builder))
+        res.asInstanceOf[ContentNodeBuilder].builder 
+    })
 
-    private def enumEntrySignature(entry: DClass): ContentNode =
+object ScalaSignatureProvider:     
+    def rawSignature(documentable: Documentable, builder: SignatureBuilder): SignatureBuilder = 
+        documentable match
+            case extension: DFunction if extension.get(MethodExtension).extensionInfo.isDefined =>
+                extensionSignature(extension, builder)
+            case method: DFunction if method.get(IsGiven) != null =>
+                givenMethodSignature(method, builder)
+            case method: DFunction =>
+                methodSignature(method, builder)
+            case enumEntry: DClass if enumEntry.get(IsEnumEntry) != null => 
+                enumEntrySignature(enumEntry, builder)
+            case clazz: DClass =>
+                classSignature(clazz, builder)
+            case enumProperty: DProperty if enumProperty.get(IsEnumEntry) != null => 
+                enumPropertySignature(enumProperty, builder)
+            case property: DProperty =>
+                propertySignature(property, builder)
+            case parameter: DParameter =>
+                parameterSignature(parameter, builder)
+            case _ => 
+                ???
+
+
+    private def enumEntrySignature(entry: DClass, bdr: SignatureBuilder): SignatureBuilder =
         val ext = entry.get(ClasslikeExtension)
-        signatureContent(entry){ bdr => 
-            val temp = bdr
-                .text("case ")
-                .driLink(entry.getName, entry.getDri)
-                .generics(entry)
+        val temp: SignatureBuilder = bdr
+            .text("case ")
+            .name(entry.getName, entry.getDri)
+            .generics(entry)
 
-            val temp2 = ext.constructor.toSeq.foldLeft(temp){ (bdr, elem) =>
-                bdr.functionParameters(elem)
-            }
-            ext.parentTypes match{
-                case Nil => temp2
-                case extendType :: withTypes =>
-                    val temp3 = temp2
-                        .text(" extends ")
-                        .typeSignature(extendType)
-                    withTypes.foldLeft(temp3){ (bdr, tpe) =>
-                        bdr.text(" with ").typeSignature(tpe)
+        val temp2 = ext.constructor.toSeq.foldLeft(temp){ (bdr, elem) =>
+            bdr.functionParameters(elem)
+        }
+        ext.parentTypes match{
+            case Nil => temp2
+            case extendType :: withTypes =>
+                val temp3 = temp2
+                    .text(" extends ")
+                    .typeSignature(extendType)
+                withTypes.foldLeft(temp3){ (bdr, tpe) =>
+                    bdr.text(" with ").typeSignature(tpe)
 
-                    }
-            }
+                }
         }
 
-    private def enumPropertySignature(entry: DProperty): ContentNode = 
-        val modifiedType = entry.getType match{
+    private def enumPropertySignature(entry: DProperty, builder: SignatureBuilder): SignatureBuilder = 
+        val modifiedType = entry.getType match
             case t: TypeConstructor => TypeConstructor(
                 t.getDri,
                 t.getProjections.asScala.map{ 
@@ -80,148 +94,135 @@ class ScalaSignatureProvider(contentConverter: CommentsToContentConverter, logge
                 t.getModifier
             )
             case other => other
-        }
-        signatureContent(entry){ builder => builder
+        
+        builder
             .text("case ")
-            .driLink(entry.getName, entry.getDri)
+            .name(entry.getName, entry.getDri)
             .text(" extends ")
             .typeSignature(modifiedType)
 
-        }
 
-    private def classSignature(clazz: DClass): ContentNode = 
+    private def classSignature(clazz: DClass, builder: SignatureBuilder): SignatureBuilder =
         val ext = clazz.get(ClasslikeExtension)
-        signatureContent(clazz){ builder =>
-            val temp = builder
-                .annotationsBlock(clazz)
-                .modifiersAndVisibility(clazz, ext.kind.name)
-                .driLink(clazz.getName, clazz.getDri)
-                .generics(clazz)
-            val temp2 = ext.constructor.toSeq.foldLeft(temp){ (bdr, elem) =>
-                bdr.functionParameters(elem)
-            }
-            ext.parentTypes match{
-                case Nil => temp2
-                case extendType :: withTypes =>
-                    val temp3 = temp2
-                        .text(" extends ")
-                        .typeSignature(extendType)
-                    withTypes.foldLeft(temp3){ (bdr, tpe) =>
-                        bdr.text(" with ").typeSignature(tpe)
-                    }
-            }
+        val temp = builder
+            .annotationsBlock(clazz)
+            .modifiersAndVisibility(clazz, ext.kind.name)
+            .name(clazz.getName, clazz.getDri)
+            .generics(clazz)
+
+        val temp2 = ext.constructor.toSeq.foldLeft(temp){ (bdr, elem) =>
+            bdr.functionParameters(elem)
         }
+        ext.parentTypes match
+            case Nil => temp2
+            case extendType :: withTypes =>
+                val temp3 = temp2
+                    .text(" extends ")
+                    .typeSignature(extendType)
+                withTypes.foldLeft(temp3){ (bdr, tpe) =>
+                    bdr.text(" with ").typeSignature(tpe)
+                }
 
-    private def extensionSignature(extension: DFunction): ContentNode =
-        signatureContent(extension){ builder =>
-            val grouped = extension.get(MethodExtension).extensionInfo.map(_.isGrouped).getOrElse(false)
-            val extendedSymbol = if (extension.isRightAssociative()) {
-                extension.getParameters.asScala(extension.get(MethodExtension).parametersListSizes(0))
-            } else {
-                extension.getParameters.asScala(0)
-            }
-            val bldr = builder.annotationsBlock(extension)
-            val bdr = (
-                if(!grouped){
-                bldr
-                    .text("extension ")
-                    .text(s" (${extendedSymbol.getName}: ")
-                    .typeSignature(extendedSymbol.getType)
-                    .text(") ")
-                } else bldr
-            )
-                .modifiersAndVisibility(extension, "def")
-                .driLink(extension.getName, extension.getDri)
-                .generics(extension)  
-                .functionParameters(extension)
-            if !extension.isConstructor then
-                bdr
-                    .text(":")
-                    .text(" ")
-                    .typeSignature(extension.getType)
-            else bdr
+    private def extensionSignature(extension: DFunction, builder: SignatureBuilder): SignatureBuilder =
+        val grouped = extension.get(MethodExtension).extensionInfo.map(_.isGrouped).getOrElse(false)
+        val extendedSymbol = if (extension.isRightAssociative()) {
+            extension.getParameters.asScala(extension.get(MethodExtension).parametersListSizes(0))
+        } else {
+            extension.getParameters.asScala(0)
         }
+        val bldr = builder.annotationsBlock(extension)
+        val bdr = (
+            if(!grouped){
+            bldr
+                .text("extension ")
+                .text(s" (${extendedSymbol.getName}: ")
+                .typeSignature(extendedSymbol.getType)
+                .text(") ")
+            } else bldr
+        )
+            .modifiersAndVisibility(extension, "def")
+            .name(extension.getName, extension.getDri)
+            .generics(extension)  
+            .functionParameters(extension)
+        if !extension.isConstructor then
+            bdr
+                .text(":")
+                .text(" ")
+                .typeSignature(extension.getType)
+        else bdr
 
-    private def givenMethodSignature(method: DFunction): ContentNode = signatureContent(method){
-        builder => 
-            val bdr = builder
-                .text("given ")
-            method.get(IsGiven).givenInstance match {
-                case Some(instance) => bdr
-                    .driLink(method.getName, method.getDri)
-                    .text(" as ")
-                    .typeSignature(instance)
-                case None => bdr.typeSignature(method.getType)
-            }
+    private def givenMethodSignature(method: DFunction, builder: SignatureBuilder): SignatureBuilder =
+        val bdr = builder.text("given ")
+        method.get(IsGiven).givenInstance match {
+            case Some(instance) => bdr
+                .name(method.getName, method.getDri)
+                .text(" as ")
+                .typeSignature(instance)
+            case None => bdr.typeSignature(method.getType)
         }
-
-    private def methodSignature(method: DFunction): ContentNode = signatureContent(method){ 
-        builder => 
-            val bdr = builder
-            .annotationsBlock(method)
-            .modifiersAndVisibility(method, "def")
-            .driLink(method.getName, method.getDri)
-            .generics(method)  
-            .functionParameters(method)
-            if !method.isConstructor then
-                bdr
-                    .text(":")
-                    .text(" ")
-                    .typeSignature(method.getType)
-            else bdr
-        }
-
-    private def propertySignature(property: DProperty): ContentNode = 
-        property.get(PropertyExtension).kind match
-            case kind if property.get(IsGiven) != null => givenPropertySignature(property)
-            case "type" => typeSignature(property)
-            case other => fieldSignature(property, other)
-
-    private def typeSignature(typeDef: DProperty): ContentNode =
-        val modifiers = typeDef.getExtra.getMap.get(AdditionalModifiers.Companion).asInstanceOf[AdditionalModifiers]
-        val isOpaque = modifiers != null && modifiers.getContent.defaultValue.asScala.contains(ScalaOnlyModifiers.Opaque)
-        signatureContent(typeDef){ builder => 
-            val bdr = builder
-                .annotationsBlock(typeDef)
-                .modifiersAndVisibility(typeDef, "type")
-                .driLink(typeDef.getName, typeDef.getDri)
-                .generics(typeDef)
-            if(!isOpaque){
-                (if !typeDef.get(PropertyExtension).isAbstract then bdr.text(" = ") else bdr)
-                    .typeSignature(typeDef.getType)
-            } else bdr
-        } 
-
-    private def givenPropertySignature(property: DProperty): ContentNode = signatureContent(property){ 
-        builder =>
-            val bdr = builder
-                .text("given ")
-                .driLink(property.getName, property.getDri)
-            property.get(IsGiven).givenInstance match {
-                case Some(instance) => bdr
-                    .text(" as ")
-                    .typeSignature(instance)
-                case None => bdr
-            }
-    }
         
 
-    private def fieldSignature(property: DProperty, kind: String): ContentNode =
-        signatureContent(property){ builder => builder
+    private def methodSignature(method: DFunction, builder: SignatureBuilder): SignatureBuilder =
+        val bdr = builder
+        .annotationsBlock(method)
+        .modifiersAndVisibility(method, "def")
+        .name(method.getName, method.getDri)
+        .generics(method)  
+        .functionParameters(method)
+        if !method.isConstructor then
+            bdr
+                .text(":")
+                .text(" ")
+                .typeSignature(method.getType)
+        else bdr
+        
+
+    private def propertySignature(property: DProperty, builder: SignatureBuilder): SignatureBuilder =
+        property.get(PropertyExtension).kind match
+            case kind if property.get(IsGiven) != null => givenPropertySignature(property, builder)
+            case "type" => typeSignature(property, builder)
+            case other => fieldSignature(property, other, builder)
+
+    private def typeSignature(typeDef: DProperty, builder: SignatureBuilder): SignatureBuilder =
+        val modifiers = typeDef.getExtra.getMap.get(AdditionalModifiers.Companion).asInstanceOf[AdditionalModifiers]
+        val isOpaque = modifiers != null && modifiers.getContent.defaultValue.asScala.contains(ScalaOnlyModifiers.Opaque)
+        val bdr = builder
+            .annotationsBlock(typeDef)
+            .modifiersAndVisibility(typeDef, "type")
+            .name(typeDef.getName, typeDef.getDri)
+            .generics(typeDef)
+        if(!isOpaque){
+            (if !typeDef.get(PropertyExtension).isAbstract then bdr.text(" = ") else bdr)
+                .typeSignature(typeDef.getType)
+        } else bdr
+        
+
+    private def givenPropertySignature(property: DProperty, builder: SignatureBuilder): SignatureBuilder =
+        val bdr = builder
+            .text("given ")
+            .name(property.getName, property.getDri)
+
+        property.get(IsGiven).givenInstance match {
+            case Some(instance) => bdr
+                .text(" as ")
+                .typeSignature(instance)
+            case None => bdr
+        }
+
+    private def fieldSignature(property: DProperty, kind: String, builder: SignatureBuilder): SignatureBuilder =
+        builder
             .annotationsBlock(property)
             .modifiersAndVisibility(property, kind)
-            .driLink(property.getName, property.getDri)
+            .name(property.getName, property.getDri)
             .text(":")
             .text(" ")
             .typeSignature(property.getType)
-        }    
 
-    private def parameterSignature(parameter: DParameter): ContentNode = 
+    private def parameterSignature(parameter: DParameter, builder: SignatureBuilder): SignatureBuilder =
         val ext = parameter.get(ParameterExtension)
-        signatureContent(parameter){ builder => builder
+        builder
             .text(if ext.isGrouped then "extension (" else "(")
             .text(parameter.getName)
             .text(": ")
             .typeSignature(parameter.getType)
             .text(")")
-        }
