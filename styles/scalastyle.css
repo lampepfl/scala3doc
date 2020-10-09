@@ -410,11 +410,6 @@ dl.paramsdesc dd {
 	padding: 2px 0;
 }
 
-.platform-dependent-row dl.attributes > dd {
-  padding-left: 3em;
-}
-
-
 /* Footer */
 footer {
   display: flex;
