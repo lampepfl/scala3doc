@@ -42,19 +42,25 @@ lazy val root = project
   )
 
 
-val dokkaJavaApiJar = file("libs") / "dokkaJavaApi-0.1.1-SNAPSHOT.jar"
 val gradleRootDir = file("dokkaJavaApi")
+
+val dokkaJavaApiJarTask = taskKey[File]("Path to Dokka Java API jar")
+dokkaJavaApiJarTask := file("libs") / "dokkaJavaApi-0.1.1-SNAPSHOT.jar"
 
 val buildDokkaApi = taskKey[File]("Compile dokka wrapper and put jar in lib")
 buildDokkaApi := {
   streams.value.log.info("Building Dokka API with Gradle...")
   sys.process.Process(Seq("./gradlew", "build"), gradleRootDir).!
 
+  val dokkaJavaApiJar = dokkaJavaApiJarTask.value
+
   if (dokkaJavaApiJar.exists()) IO.delete(dokkaJavaApiJar)
   IO.move(gradleRootDir / "build" / "libs" / "dokkaJavaApi-0.1.1-SNAPSHOT.jar", dokkaJavaApiJar)
   streams.value.log.success(s"Dokka API copied to $dokkaJavaApiJar")
   dokkaJavaApiJar
 }
+
+addArtifact(Artifact("dokka-java-api", "jar", "jar"), dokkaJavaApiJarTask)
 
 compile.in(Compile) := (compile.in(Compile).dependsOn(buildDokkaApi)).value
 
@@ -63,7 +69,7 @@ generateSelfDocumentation := {
   run.in(Compile).fullInput(" -o output/self -t target/scala-3.0.0-M1/classes -d documentation -n scala3doc -s src/main/scala=https://github.com/lampepfl/scala3doc/tree/master/src/main/scala#L").evaluated // TODO #35 proper sbt integration
 }
 
-unmanagedJars in Compile += dokkaJavaApiJar
+unmanagedJars in Compile += dokkaJavaApiJarTask.value
 
 // Uncomment to debug dokka processing (require to run debug in listen mode on 5005 port)
 // javaOptions.in(run) += "-agentlib:jdwp=transport=dt_socket,server=n,address=localhost:5005,suspend=y"
