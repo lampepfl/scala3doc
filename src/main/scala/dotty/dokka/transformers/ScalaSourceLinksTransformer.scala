@@ -34,7 +34,8 @@ class ScalaSourceLinksTransformer(
 
     override def invoke(input: DModule, context: DokkaContext): DModule = 
         input.updateMembers { 
-            case c: Member with WithExpectActual with WithExtraProperties[Member] => 
+            case c0: (Member & WithExpectActual & WithExtraProperties[_]) => 
+                val c = c0.asInstanceOf[Member & WithExpectActual & WithExtraProperties[Member]]
                 c.withNewExtras(c.getExtra plus getSourceLinks(c))
             case c => c
         }
