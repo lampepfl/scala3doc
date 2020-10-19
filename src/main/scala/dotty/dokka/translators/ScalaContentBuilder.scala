@@ -480,7 +480,14 @@ class ScalaPageContentBuilder(
                 val docs = documentable.getDocumentation.asScala.values.headOption.flatMap(_.getChildren.asScala.headOption)
                 val signatureBuilder = buildSignature(documentable)
                 val originInfo = documentable.origin match {
-                    case Origin.ImplicitlyAddedBy(name, dri) => Signature("Implicitly added by ", SLink(name, dri))
+                    case Origin.ImplicitlyAddedBy(convName, convDri, fromType, toType) => 
+                        Signature.merge(
+                                Signature("This member is added by implicit conversion from "),
+                                fromType,
+                                Signature(" to "),
+                                toType,
+                                Signature(" which is performed by ", SLink(convName, convDri)),
+                        )
                     case Origin.ExtensionFrom(name, dri) => Signature("Extension method from ", SLink(name, dri))
                     case _ => Nil 
                 }
