@@ -52,3 +52,5 @@ class OpaqueTypes extends SingleFileTest("opaqueTypes", SingleFileTest.all)
 class Annotations extends SingleFileTest("annotations", SingleFileTest.all)
 
 class ImplicitConversions extends MultipleFileTest(List("implicitConversions/A"), List("implicitConversions"), SingleFileTest.all)
+
+class ImplicitClasslikes extends SingleFileTest("implicitClasslikes", SingleFileTest.classlikeKinds)

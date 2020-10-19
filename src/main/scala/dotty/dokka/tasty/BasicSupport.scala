@@ -104,6 +104,15 @@ class SymOps[R <: Reflection](val r: R):
       symbol.is(dotc.core.Flags.Open)
     }
 
+    def hackFlagsForImplicitClasslikes: Seq[Modifier] =
+      def implicitObjectCondition = sym.flags.is(Flags.Object) && sym.companionModule.flags.is(Flags.Implicit)
+      def implicitClassCondition = sym.owner.isClassDef && sym.owner.classMethods.exists(m => 
+        m.name == sym.name && m.flags.is(Flags.Synthetic & Flags.Implicit)
+      )
+      if sym.isClassDef && (implicitObjectCondition || implicitClassCondition)
+      then Seq(Modifier.Implicit)
+      else Nil
+
     // Order here determines order in documenation
     def getExtraModifiers(): Seq[Modifier] = Seq(
         Flags.Final -> Modifier.Final,
@@ -117,6 +126,7 @@ class SymOps[R <: Reflection](val r: R):
         Flags.Case -> Modifier.Case,
         ).collect { case (flag, mod) if sym.flags.is(flag) => mod }
           ++ (if(sym.hackIsOpen) Seq(Modifier.Open) else Nil)
+          ++ sym.hackFlagsForImplicitClasslikes
 
     def isHiddenByVisibility: Boolean =
       import VisibilityScope._

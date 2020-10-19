@@ -37,6 +37,9 @@ trait SyntheticsSupport:
     
     def getAllMembers: List[Symbol] = hackGetAllMembers(self.reflect)(s)
 
+    // This method is useful for debugging flags
+    def flagsString: String = hackFlagsString(self.reflect)(s)
+
   def isSyntheticField(c: Symbol) =
     c.flags.is(Flags.CaseAcessor) || c.flags.is(Flags.Object)
 
@@ -90,6 +93,14 @@ trait SyntheticsSupport:
     val baseTypes: List[(dotc.core.Symbols.Symbol, dotc.core.Types.Type)] = 
       ref.baseClasses.map(b => b -> ref.baseType(b))
     baseTypes.asInstanceOf[List[(r.Symbol, r.Type)]]
+  }
+
+  def hackFlagsString(r: Reflection)(rsym: r.Symbol): String = {
+    import dotty.tools.dotc
+    import dotty.tools.dotc.core.Flags._
+    given dotc.core.Contexts.Context = r.rootContext.asInstanceOf
+    val sym = rsym.asInstanceOf[dotc.core.Symbols.Symbol]
+    sym.flags.flagStrings().mkString(", ")
   }
 
   def getSupertypes(c: ClassDef) = hackGetSupertypes(self.reflect)(c).tail
