@@ -1,7 +1,7 @@
 // re-expose subproject settings
 val `example-project` = ExampleProject.`example-project`
 
-val dottyVersion = "0.27.0-RC1"
+val dottyVersion = "3.0.0-M1-bin-SNAPSHOT"
 val dokkaVersion = "1.4.0"
 val kotlinxVersion = "0.7.2" // upgrade when upgrading dokka
 val flexmarkVersion = "0.42.12"
@@ -16,9 +16,9 @@ libraryDependencies ++= Seq(
   "org.jetbrains.kotlinx" % "kotlinx-html-jvm" % kotlinxVersion,
   "com.virtuslab.dokka" % "dokka-site" % dokkaSiteVersion,
 
-  "ch.epfl.lamp" %% "dotty-tasty-inspector" % dottyVersion,
-  "ch.epfl.lamp" %% "dotty-compiler" % dottyVersion,
-  "ch.epfl.lamp" %% "dotty-library" % dottyVersion,
+  "org.scala-lang" %% "scala3-tasty-inspector" % dottyVersion,
+  "org.scala-lang" %% "scala3-compiler" % dottyVersion,
+  // "ch.epfl.lamp" %% "dotty-library" % dottyVersion,
   "org.scala-sbt" % "io_2.13" % "1.3.4",
 
   "com.vladsch.flexmark" % "flexmark-all" % flexmarkVersion,
@@ -60,7 +60,7 @@ compile.in(Compile) := (compile.in(Compile).dependsOn(buildDokkaApi)).value
 
 val generateSelfDocumentation = inputKey[Unit]("Generate example documentation")
 generateSelfDocumentation := {
-  run.in(Compile).fullInput(" -o output/self -t target/scala-0.27/classes -d documentation -n scala3doc -s src/main/scala=https://github.com/lampepfl/scala3doc/tree/master/src/main/scala#L").evaluated // TODO #35 proper sbt integration
+  run.in(Compile).fullInput(" -o output/self -t target/scala-3.0.0-M1/classes -d documentation -n scala3doc -s src/main/scala=https://github.com/lampepfl/scala3doc/tree/master/src/main/scala#L").evaluated // TODO #35 proper sbt integration
 }
 
 unmanagedJars in Compile += dokkaJavaApiJar

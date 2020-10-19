@@ -10,7 +10,7 @@ object ExampleProject {
       name := "scala3doc-example-project",
       description := "Example SBT project that is documented using Scala3doc",
       version := "0.1.0-SNAPSHOT",
-      scalaVersion := "0.27.0-RC1",
+      scalaVersion := "3.0.0-M1-bin-SNAPSHOT",
 
       scala3docOptions ++= Seq("--name", "example-project"),
       Compile / doc / target := file("output/example-project"),

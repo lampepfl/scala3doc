@@ -101,9 +101,10 @@ class MemberLookupTests {
     import scala.tasty.inspector.TastyInspector
     class Inspector extends TastyInspector:
       var alreadyRan: Boolean = false
-      override def processCompilationUnit(using r: Reflection)(root: r.Tree): Unit =
+
+      override def processCompilationUnit(using ctx: quoted.QuoteContext)(root: ctx.reflect.Tree): Unit =
         if !alreadyRan then
-          this.test()
+          this.test()(using ctx.reflect)
           alreadyRan = true
 
       def test()(using r: Reflection): Unit = {
@@ -121,7 +122,7 @@ class MemberLookupTests {
     import java.io.File
     import scala.collection.mutable.ListBuffer
 
-    val classRoot = File("target/scala-0.27/classes")
+    val classRoot = File("target/scala-3.0.0-M1/classes")
 
     def go(bld: ListBuffer[String])(file: File): Unit =
       file.listFiles.foreach { f =>
