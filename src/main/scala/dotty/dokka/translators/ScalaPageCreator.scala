@@ -393,7 +393,7 @@ class ScalaPageCreator(
         
 
         def contentForTypesInfo(c: DClass) =
-            val supertypes = c.parents
+            val supertypes = c.parents.values.flatMap(x => x)
             val subtypes = c.knownChildren
 
             def contentForTypeLink(builder: DocBuilder, link: LinkToType): DocBuilder =

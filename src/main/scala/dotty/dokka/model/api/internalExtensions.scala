@@ -41,7 +41,7 @@ object MemberExtension extends BaseKey[Documentable, MemberExtension]:
 case class CompositeMemberExtension(
   members : Seq[Member] = Nil,
   directParents: Seq[Signature] = Nil,
-  parents: Seq[LinkToType] = Nil,
+  parents: Map[LinkToType, Seq[LinkToType]] = Map(),
   knownChildren: Seq[LinkToType] = Nil
 ) extends ExtraProperty[Documentable]:
   override def getKey = CompositeMemberExtension

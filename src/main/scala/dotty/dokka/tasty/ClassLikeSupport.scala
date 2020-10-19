@@ -14,7 +14,6 @@ import dotty.dokka.model.api.Kind
 import dotty.dokka.model.api.ImplicitConversion
 import dotty.dokka.model.api.{Signature => DSignature, Link => DLink}
 
-
 trait ClassLikeSupport:
   self: TastyParser =>
   import reflect._
@@ -35,9 +34,19 @@ trait ClassLikeSupport:
       signatureOnly: Boolean = false,
       modifiers: Seq[Modifier] = classDef.symbol.getExtraModifiers(),
     ): DClass = 
-      val supertypes = getSupertypes(classDef).map{ case (symbol, tpe) =>
-        LinkToType(tpe.dokkaType.asSignature, symbol.dri, kindForClasslike(symbol))
+
+      def hackGetParents(classDef: ClassDef): Option[List[Tree]] = scala.util.Try(classDef.parents).toOption
+
+      def getSupertypesGraph(classDef: ClassDef, link: LinkToType): Seq[(LinkToType, LinkToType)] = {
+        val clsDf = classDef.symbol.tree.asInstanceOf[ClassDef]
+        val parents = hackGetParents(clsDf)
+        parents.fold(Seq())(_.flatMap { case tree =>
+            val superLink = LinkToType(tree.dokkaType.asSignature, tree.symbol.dri, kindForClasslike(tree.symbol))
+            Seq(link -> superLink) ++ getSupertypesGraph(tree.asInstanceOf[ClassDef], superLink)
+          }       
+        )
       }
+      val supertypes: Map[LinkToType, Seq[LinkToType]] = getSupertypesGraph(classDef, null).groupMap(_._1)(_._2)
       val selfSiangture: DSignature = typeForClass(classDef).dokkaType.asSignature
       val baseExtra = PropertyContainer.Companion.empty()
             .plus(ClasslikeExtension(classDef.getConstructorMethod, classDef.getCompanion))

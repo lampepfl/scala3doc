@@ -97,9 +97,9 @@ object Signature:
 extension (s: Signature):
   def join(a: Signature): Signature = s ++ a
 
-case class LinkToType(signature: Signature, dri: DRI, kind: Kind)
+case class LinkToType(val signature: Signature, val dri: DRI, val kind: Kind)
 
-case class HierarchyDiagram(edges: Seq[Edge])
+case class HierarchyDiagram(val edges: Seq[Edge])
 case class Vertex(val id: Int, val body: LinkToType)
 case class Edge(val from: Vertex, val to: Vertex)
 
@@ -130,7 +130,7 @@ extension[T] (member: Member):
 
   // TODO rename parent and knownChildren
   def allMembers: Seq[Member] = compositeMemberExt.fold(Nil)(_.members)
-  def parents: Seq[LinkToType] = compositeMemberExt.fold(Nil)(_.parents)
+  def parents: Map[LinkToType, Seq[LinkToType]] = compositeMemberExt.fold(Map())(_.parents)
   def directParents: Seq[Signature] = compositeMemberExt.fold(Nil)(_.directParents)
   def knownChildren: Seq[LinkToType] = compositeMemberExt.fold(Nil)(_.knownChildren)
 
