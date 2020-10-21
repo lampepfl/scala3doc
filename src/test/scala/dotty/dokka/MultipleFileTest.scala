@@ -59,7 +59,9 @@ abstract class MultipleFileTest(val sourceFiles: List[String], val tastyFolders:
         val unexpectedFromSource = allFromSource.map(_._2).flatten.filter(extractSymbolName(_) != "NULL").map(cleanup)
         val unexpectedSignatureSymbolNames = unexpectedFromSource.map(extractSymbolName)
 
-        val allFromDocumentation = tastyFolders.flatMap(folder => signaturesFromDocumentation(s"target/scala-3.0.0-M1/classes/tests/$folder"))
+        val allFromDocumentation = tastyFolders.flatMap { folder =>
+          signaturesFromDocumentation(s"${TestUtils.Scala3docClassRoot}/tests/$folder")
+        }
         val fromDocumentation = allFromDocumentation.filter(extractSymbolName(_) != "NULL").map(cleanup)
         
         val documentedSignatures = fromDocumentation.flatMap(matchSignature(_, expectedFromSource)).toSet
