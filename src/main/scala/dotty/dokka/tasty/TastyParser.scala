@@ -20,6 +20,7 @@ import scala.tasty.Reflection
 import scala.tasty.inspector.TastyInspector
 import dotty.dokka.model.api.withNewMembers
 import com.virtuslab.dokka.site.SourceSetWrapper
+import dotty.dokka.model.api.Member
 
 /** Responsible for collectively inspecting all the Tasty files we're interested in.
   *
@@ -98,7 +99,7 @@ trait DokkaBaseTastyInspector:
   val parser: Parser
   val config: DottyDokkaConfig
 
-  private val topLevels = Seq.newBuilder[Documentable]
+  private val topLevels = Seq.newBuilder[Member]
 
   def processCompilationUnit(reflect: Reflection)(root: reflect.Tree): Unit =
     val parser = new TastyParser(reflect, this, config)
@@ -129,7 +130,7 @@ trait DokkaBaseTastyInspector:
             null,
             sourceSet.toSet,
             f.getExtra
-          ).withNewMembers(entries.filterNot(_.isInstanceOf[DPackage]).toList).asInstanceOf[DPackage]
+          ).withNewMembers(entries.collect { case m: Member if !m.isInstanceOf[DPackage] => m }.toList).asInstanceOf[DPackage]
         )
         found.getOrElse(throw IllegalStateException("No package for entries found"))
       }
@@ -177,8 +178,8 @@ case class TastyParser(reflect: Reflection, inspector: DokkaBaseTastyInspector, 
     e.printStackTrace()
     throw e
 
-  def parseRootTree(root: Tree): Seq[Documentable] =
-    val docs = Seq.newBuilder[Documentable]
+  def parseRootTree(root: Tree): Seq[Member] =
+    val docs = Seq.newBuilder[Member]
     object Traverser extends TreeTraverser:
       var seen: List[Tree] = Nil
 

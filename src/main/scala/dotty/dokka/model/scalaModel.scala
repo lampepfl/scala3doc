@@ -10,6 +10,7 @@ import org.jetbrains.dokka.model.properties._
 import org.jetbrains.dokka.pages._
 import java.util.{List => JList, Set => JSet}
 import dotty.dokka.model.api.Signature
+import dotty.dokka.model.api.Member
 import dotty.dokka.model.api.HierarchyDiagram
 
 case class TastyDocumentableSource(val path: String, val lineNumber: Int) extends DocumentableSource {
@@ -56,7 +57,7 @@ object ScalaTagWrapper {
     override def getRoot = descTag
 }
 
-case class ImplicitConversion(conversion: Documentable, from: DRI, to: DRI)
+case class ImplicitConversion(conversion: Member, from: DRI, to: DRI)
 
 case class HierarchyDiagramContentNode(
   val diagram: HierarchyDiagram, 

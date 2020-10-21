@@ -20,33 +20,19 @@ import dotty.dokka.model.api._
 import dotty.dokka._
 
 object FilterAttributes:
-  def attributesFor(documentable: Documentable): Map[String, String] = 
+  def attributesFor(documentable: Member): Map[String, String] = 
     val base = visibity(documentable) ++ visibity(documentable) ++ origin(documentable) ++ keywords(documentable)
     base.filter(_._2.nonEmpty)
 
-  private def keywords(documentable: Documentable): Map[String, String] = documentable match 
-    case v: Member =>
-      Map("keywords" -> v.modifiers.map(_.name).mkString(","))  
-    case _ =>
-      Map.empty
+  private def keywords(v: Member): Map[String, String] = Map("keywords" -> v.modifiers.map(_.name).mkString(","))  
 
+  private def visibity(v: Member): Map[String, String] = Map("visibility" -> v.visibility.name)
 
-  private def visibity(documentable: Documentable): Map[String, String] = documentable match
-    case v: Member => 
-      Map("visibility" -> v.visibility.name)
-    case _ => 
-      Map.empty
-
-
-  private def origin(documentable: Documentable): Map[String, String] =  documentable match
-    case v: Member => 
-      v.origin match
-        case Origin.InheritedFrom(name, _) => Map("inherited" -> name)
-        case Origin.ImplicitlyAddedBy(convName, _, _, _) => Map("implicitly" -> s"by $convName")
-        case Origin.ExtensionFrom(name, _) => Map("extension" -> s"from $name")
-        case _ => Map.empty
-    case _ =>
-      Map.empty     
+  private def origin(v: Member): Map[String, String] = v.origin match
+    case Origin.InheritedFrom(name, _) => Map("inherited" -> name)
+    case Origin.ImplicitlyAddedBy(name, _, _, _) => Map("implicitly" -> s"by $name")
+    case Origin.ExtensionFrom(name, _) => Map("extension" -> s"from $name")
+    case _ => Map.empty
 
   def defaultValues = Map(
     "inherited" ->  "Not inherited",

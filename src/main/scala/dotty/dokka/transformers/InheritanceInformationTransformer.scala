@@ -16,7 +16,7 @@ class InheritanceInformationTransformer(val ctx: DokkaContext) extends Documenta
         val subtypes = getSupertypes(original).groupBy(_._1).transform((k, v) => v.map(_._2))
         original.updateMembers(m =>  m.withKnownChildren(subtypes.getOrElse(m.dri, Nil)))
 
-    private def getSupertypes(d: Documentable): Seq[(DRI, LinkToType)] = d match {
+    private def getSupertypes(d: Member): Seq[(DRI, LinkToType)] = d match {
         case m: DModule => m.getPackages.asScala.toList.flatMap(p => getSupertypes(p))
         case c: Member  => 
             val selfMapping = if !c.kind.isInstanceOf[Classlike] then Nil else

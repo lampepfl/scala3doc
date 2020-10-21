@@ -5,7 +5,6 @@ package api
 import org.jetbrains.dokka.DokkaConfiguration$DokkaSourceSet
 import org.jetbrains.dokka.links._
 import org.jetbrains.dokka.model.{Projection => JProjection}
-import org.jetbrains.dokka.model.Documentable
 import org.jetbrains.dokka.model.DFunction
 import org.jetbrains.dokka.model.DClass
 import org.jetbrains.dokka.model.DocumentableSource
@@ -32,10 +31,10 @@ private [model] case class MemberExtension(
   val annotations: List[Annotation],
   signature: Signature, 
   origin: Origin = Origin.DefinedWithin
-) extends ExtraProperty[Documentable]:
+) extends ExtraProperty[Member]:
  override def getKey = MemberExtension
 
-object MemberExtension extends BaseKey[Documentable, MemberExtension]:
+object MemberExtension extends BaseKey[Member, MemberExtension]:
   val empty = MemberExtension(Visibility.Unrestricted, Nil, Kind.Unknown, Nil, Nil)
 
 case class CompositeMemberExtension(
@@ -43,15 +42,15 @@ case class CompositeMemberExtension(
   directParents: Seq[Signature] = Nil,
   parents: Seq[LinkToType] = Nil,
   knownChildren: Seq[LinkToType] = Nil
-) extends ExtraProperty[Documentable]:
+) extends ExtraProperty[Member]:
   override def getKey = CompositeMemberExtension
 
-object CompositeMemberExtension extends BaseKey[Documentable, CompositeMemberExtension]:
+object CompositeMemberExtension extends BaseKey[Member, CompositeMemberExtension]:
   val empty = CompositeMemberExtension()
 
   override def mergeStrategyFor(left: CompositeMemberExtension, right: CompositeMemberExtension) = 
     new MergeStrategy$Replace(left.copy(members = left.members ++ right.members))
-      .asInstanceOf[MergeStrategy[Documentable]]
+      .asInstanceOf[MergeStrategy[Member]]
 
 extension (member: Member):
   private def putInMember(ext: MemberExtension) = 

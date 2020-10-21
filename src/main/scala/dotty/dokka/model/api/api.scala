@@ -110,10 +110,10 @@ case class Vertex(val id: Int, val body: LinkToType)
 case class Edge(val from: Vertex, val to: Vertex)
 
 
-type Member = Documentable // with WithExtraProperty[_] // Kotlin does not add generics to ExtraProperty implemented by e.g. DFunction
+type Member = Documentable with WithExtraProperties[_] 
 
 object Member:
-  def unapply(d: Documentable): Option[(String, DRI, Visibility, Kind, Origin)] = 
+  def unapply(d: Member): Option[(String, DRI, Visibility, Kind, Origin)] = 
     d.memberExt.map(v => (d.getName, d.getDri, v.visibility, v.kind, v.origin))
 
 extension[T] (member: Member):

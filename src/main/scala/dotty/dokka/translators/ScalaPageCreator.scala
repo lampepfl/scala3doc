@@ -141,7 +141,8 @@ class ScalaPageCreator(
         contentBuilder.contentForDocumentable(c, buildBlock = buildBlock)
     }
 
-    override def contentForMember(d: Documentable) = {
+    override def contentForMember(dd: Documentable) =
+        val d = dd.asInstanceOf[Member]
         def buildBlock = (builder: DocBuilder) => builder
             .group(kind = ContentKind.Cover){ bd => bd.cover(d.getName)() }
             .divergentGroup(
@@ -158,12 +159,11 @@ class ScalaPageCreator(
                 }
             }
         contentBuilder.contentForDocumentable(d, buildBlock = buildBlock)
-    }
 
-    override def contentForFunction(f: DFunction) = contentForMember(f)
+    override def contentForFunction(f: DFunction) = contentForMember(f) 
 
     extension (b: DocBuilder):
-        def descriptionIfNotEmpty(d: Documentable): DocBuilder = {
+        def descriptionIfNotEmpty(d: Member): DocBuilder = {
             val desc = contentForDescription(d).asScala.toSeq
             val res = if desc.isEmpty then b else b
                 .sourceSetDependentHint(
@@ -177,9 +177,9 @@ class ScalaPageCreator(
             res
         }
 
-        def contentForComments(d: Documentable) = b
+        def contentForComments(d: Member) = b
 
-        def contentForDescription(d: Documentable) = {
+        def contentForDescription(d: Member) = {
             val specialTags = Set[Class[_]](classOf[Description])
 
             type SourceSet = DokkaConfiguration$DokkaSourceSet
@@ -319,7 +319,7 @@ class ScalaPageCreator(
                     }
 
                     d match{
-                        case d: (WithSources & WithExtraProperties[Documentable]) if d.get(SourceLinks) != null && !d.get(SourceLinks).links.isEmpty => d.get(SourceLinks).links.foldLeft(withCompanion){
+                        case d: (Member & WithSources) if d.get(SourceLinks) != null && !d.get(SourceLinks).links.isEmpty => d.get(SourceLinks).links.foldLeft(withCompanion){
                             case (bdr, (sourceSet, link)) => bdr
                                     .cell(sourceSets = Set(sourceSet)){ b => b
                                         .text("Source")

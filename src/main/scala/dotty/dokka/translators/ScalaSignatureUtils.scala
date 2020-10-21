@@ -15,7 +15,7 @@ case class InlineSignatureBuilder(names: Signature = Nil, preName: Signature = N
     override def driLink(text: String, dri: DRI): SignatureBuilder = copy(names = Link(text, dri) +: names)
 
 object InlineSignatureBuilder:
-    def typeSignatureFor(d: Documentable): Signature =
+    def typeSignatureFor(d: Member): Signature =
             ScalaSignatureProvider.rawSignature(d, InlineSignatureBuilder()).asInstanceOf[InlineSignatureBuilder].names.reverse
 
 trait SignatureBuilder extends ScalaSignatureUtils {
@@ -44,7 +44,7 @@ trait SignatureBuilder extends ScalaSignatureUtils {
     def annotationsBlock(d: Member): SignatureBuilder = 
             d.annotations.foldLeft(this){ (bdr, annotation) => bdr.buildAnnotation(annotation)}
         
-        def annotationsInline(d: Documentable with WithExtraProperties[_]): SignatureBuilder =
+        def annotationsInline(d: Member): SignatureBuilder =
                 d.annotations.foldLeft(this){ (bdr, annotation) => bdr.buildAnnotation(annotation) }
 
         private def buildAnnotation(a: Annotation): SignatureBuilder = 
@@ -69,7 +69,7 @@ trait SignatureBuilder extends ScalaSignatureUtils {
                 addParameterName(name).text(value)
         }
 
-        def modifiersAndVisibility(t: Documentable with WithAbstraction with WithVisibility with WithExtraProperties[_], kind: String) =
+        def modifiersAndVisibility(t: Member with WithAbstraction with WithVisibility, kind: String) =
             import org.jetbrains.dokka.model.properties._
             val extras = t.getExtra.getMap()
             val (prefixMods, suffixMods) = t.modifiers.partition(_.prefix)

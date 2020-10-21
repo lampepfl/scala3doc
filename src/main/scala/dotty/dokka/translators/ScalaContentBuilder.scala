@@ -19,26 +19,15 @@ import org.jetbrains.dokka.model.doc._
 import dotty.dokka.model.api.{Kind => _, Link => SLink, _}
 
 
-case class DocumentableSubGroup(val title: Signature, val extensions: Seq[Documentable])
+case class DocumentableSubGroup(val title: Signature, val extensions: Seq[Member])
 
-case class DocumentableGroup(name: Option[String | Documentable], documenables: Seq[Documentable | DocumentableSubGroup])    
+case class DocumentableGroup(name: Option[String | Member], documenables: Seq[Member | DocumentableSubGroup])    
 
 class ScalaPageContentBuilder(
     val commentsConverter: CommentsToContentConverter,
     val signatureProvider: SignatureProvider,
     val logger: DokkaLogger
 ) {
-
-    def contentForDRI(
-        dri: DRI,
-        sourceSets: Set[DokkaConfiguration$DokkaSourceSet],
-        kind: Kind = ContentKind.Main,
-        styles: Set[Style] = Set(),
-        extra: PropertyContainer[ContentNode] = PropertyContainer.Companion.empty(),
-        buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
-    ): ContentGroup = buildBlock(
-            ScalaDocumentableContentBuilder(Set(dri), sourceSets, kind, styles, extra)
-        ).buildContent()
 
     def contentForDRIs(
         dris: Set[DRI],
@@ -52,7 +41,7 @@ class ScalaPageContentBuilder(
         ).buildContent()
 
     def contentForDocumentable(
-        d: Documentable,
+        d: Member,
         kind: Kind = ContentKind.Main,
         styles: Set[Style] = Set(),
         extra: PropertyContainer[ContentNode] = PropertyContainer.Companion.empty(),
@@ -246,7 +235,7 @@ class ScalaPageContentBuilder(
             buildBlock: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder = p => p
         ): ScalaDocumentableContentBuilder = header(1, text, kind, sourceSets, styles, extra){buildBlock}
 
-        def signature(d: Documentable) = addChildren(signatureProvider.signature(d).asScala.toList)
+        def signature(d: Member) = addChildren(signatureProvider.signature(d).asScala.toList)
 
         def defaultHeaders = List(
             contentForDRIs(
@@ -307,7 +296,7 @@ class ScalaPageContentBuilder(
             extra: PropertyContainer[ContentNode] = mainExtra
         ) = addChild(HierarchyDiagramContentNode(diagram, DCI(mainDRI.asJava, kind), sourceSets.toDisplay.asScala.toSet, styles, extra))
 
-        def groupingBlock[A, T <: Documentable, G <: List[(A, List[T])]](
+        def groupingBlock[A, T <: Member, G <: List[(A, List[T])]](
             name: String,
             elements: G,
             kind: Kind = ContentKind.Main,
@@ -470,7 +459,7 @@ class ScalaPageContentBuilder(
         type Self = ScalaPageContentBuilder#ScalaDocumentableContentBuilder
 
         def documentableTab(name: String)(children: DocumentableGroup*): Self = 
-            def buildSignature(d: Documentable) = 
+            def buildSignature(d: Member) = 
                 ScalaSignatureProvider.rawSignature(d, InlineSignatureBuilder()).asInstanceOf[InlineSignatureBuilder]
             
             def buildAnnotations(d: Member) = 
@@ -503,8 +492,8 @@ class ScalaPageContentBuilder(
                     asParams(documentable.getDri)
                 )
                      
-            def element(e: Documentable | DocumentableSubGroup): DocumentableElement | DocumentableElementGroup = e match 
-                case e: Documentable => documentableElement(e)
+            def element(e: Member | DocumentableSubGroup): DocumentableElement | DocumentableElementGroup = e match 
+                case e: Member => documentableElement(e)
                 case e: DocumentableSubGroup =>
                     DocumentableElementGroup(
                         e.title,
@@ -519,7 +508,7 @@ class ScalaPageContentBuilder(
                             if list.documenables.isEmpty then bdr
                             else 
                                 val header = list.name match 
-                                    case Some(o: Documentable) => 
+                                    case Some(o: Member) => 
                                         buildSignature(o).names.reverse
                                     case option =>
                                         option.toSeq.map(_.toString)
@@ -538,65 +527,6 @@ class ScalaPageContentBuilder(
             mainSourcesetData.toDisplay,
             mainStyles,
             mainExtra
-        )
-
-        def divergentBlock[A, T <: Documentable, G <: List[(A, List[T])]](
-            name: String,
-            elements: G,
-            kind: Kind = ContentKind.Main,
-            sourceSets: Set[DokkaConfiguration$DokkaSourceSet] = mainSourcesetData,
-            styles: Set[Style] = Set(),
-            extra: PropertyContainer[ContentNode] = mainExtra,
-            renderWhenEmpty: Boolean = false,
-            needsSorting: Boolean = true,
-            headers: List[ContentGroup] = List(),
-            needsAnchors: Boolean = true,
-            omitSplitterOnSingletons: Boolean = true
-        )(
-            groupSplitterFunc: (ScalaPageContentBuilder#ScalaDocumentableContentBuilder, A) => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
-        ) = if (renderWhenEmpty || !elements.flatMap(_._2).isEmpty) {
-            header(3, name, kind, styles = styles, extra = extra plus SimpleAttr.Companion.header(name))()
-            .group(styles = Set(ContentStyle.WithExtraAttributes), extra = extra plus SimpleAttr.Companion.header(name)){ bdr =>
-                elements.foldLeft(bdr){ (b, groupped) =>
-                    val (key, values) = groupped
-                    (if(values.size > 1 || (values.size == 1 && !omitSplitterOnSingletons)) b.group()(bd => groupSplitterFunc(bd, key)) else b)
-                    .table(kind = kind, headers = headers, styles = styles, extra = extra plus SimpleAttr.Companion.header(name)){ tablebdr =>
-                        values.groupBy(_.getName).foldLeft(tablebdr){ case (tablebdr,(elemName, divergentElems)) => tablebdr
-                            .cell(
-                                dri = divergentElems.map(_.getDri).toSet, 
-                                sourceSets = divergentElems.flatMap(_.getSourceSets.asScala).toSet,
-                                kind = kind
-                            ){ cellbdr => cellbdr
-                                .driLink(elemName, divergentElems.head.getDri, kind = ContentKind.Main)
-                                .divergentGroup(ContentDivergentGroup.GroupID(name)){ divBdr =>
-                                    divergentElems.foldLeft(divBdr){ (bdr, elem) =>
-                                        bdr.instance(Set(elem.getDri), elem.getSourceSets.asScala.toSet){ insBdr => insBdr
-                                            .before(){ befbdr => befbdr
-                                                .contentForBrief(elem)
-                                            }
-                                            .divergent(){ divDivBdr => divDivBdr
-                                                .group(){ gbdr => gbdr
-                                                    .signature(elem)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-        } else this
-
-        def contentForBrief(d: Documentable): ScalaDocumentableContentBuilder = 
-            d.getDocumentation.asScala.foldLeft(this){ case (builder, (ss, docs)) =>
-                docs.getChildren.asScala.headOption.map(_.getRoot) match {
-                    case Some(dt) => builder.group(sourceSets = Set(ss), kind = ContentKind.BriefComment){ bldr => bldr.comment(dt) }
-                    case None => builder
-                }
-            }
-            
+        )   
     }
 }

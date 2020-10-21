@@ -21,7 +21,7 @@ class ScalaSignatureProvider(contentConverter: CommentsToContentConverter, logge
     private val styles = Set(TextStyle.Monospace).asInstanceOf[Set[Style]]
     private val contentBuilder = new ScalaPageContentBuilder(contentConverter, this, logger)
 
-    private def signatureContent(d: Documentable)(
+    private def signatureContent(d: Member)(
         func: ScalaPageContentBuilder#ScalaDocumentableContentBuilder => ScalaPageContentBuilder#ScalaDocumentableContentBuilder
     ) = contentBuilder.contentForDocumentable(d, kind = ContentKind.Symbol, styles = styles, buildBlock = func)
 
@@ -32,14 +32,15 @@ class ScalaSignatureProvider(contentConverter: CommentsToContentConverter, logge
     }
 
     override def signature(documentable: Documentable) = 
-        JList(signatureContent(documentable){ builder => 
-            val withAnnotations = ContentNodeBuilder(builder).annotationsBlock(documentable)
-            val res = ScalaSignatureProvider.rawSignature(documentable, withAnnotations)
+        val member = documentable.asInstanceOf[Member]
+        JList(signatureContent(member){ builder => 
+            val withAnnotations = ContentNodeBuilder(builder).annotationsBlock(member)
+            val res = ScalaSignatureProvider.rawSignature(member, withAnnotations)
             res.asInstanceOf[ContentNodeBuilder].builder 
         })
 
 object ScalaSignatureProvider:     
-    def rawSignature(documentable: Documentable, builder: SignatureBuilder): SignatureBuilder = 
+    def rawSignature(documentable: Member, builder: SignatureBuilder): SignatureBuilder = 
         documentable match
             case extension: DFunction if extension.kind.isInstanceOf[Kind.Extension] =>
                 extensionSignature(extension, builder)
