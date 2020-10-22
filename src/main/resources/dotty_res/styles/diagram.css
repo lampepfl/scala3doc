@@ -11,7 +11,7 @@
 .edgePath {
     stroke: #333;
     stroke-width: 1.5px;
-    fill: none;
+    fill: #333;
 }
 
 #graph {

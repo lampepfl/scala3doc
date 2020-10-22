@@ -97,11 +97,11 @@ object Signature:
 extension (s: Signature):
   def join(a: Signature): Signature = s ++ a
 
-case class LinkToType(val signature: Signature, val dri: DRI, val kind: Kind)
+case class LinkToType(signature: Signature, dri: DRI, kind: Kind)
 
-case class HierarchyDiagram(val edges: Seq[Edge])
-case class Vertex(val id: Int, val body: LinkToType)
-case class Edge(val from: Vertex, val to: Vertex)
+case class HierarchyDiagram(edges: Seq[Edge])
+case class Vertex(id: Int, body: LinkToType)
+case class Edge(from: Vertex, to: Vertex)
 
 
 type Member = Documentable // with WithExtraProperty[_] // Kotlin does not add generics to ExtraProperty implemented by e.g. DFunction

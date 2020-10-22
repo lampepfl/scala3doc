@@ -34,14 +34,14 @@ trait ClassLikeSupport:
       signatureOnly: Boolean = false,
       modifiers: Seq[Modifier] = classDef.symbol.getExtraModifiers(),
     ): DClass = 
-
       def hackGetParents(classDef: ClassDef): Option[List[Tree]] = scala.util.Try(classDef.parents).toOption
 
       def getSupertypesGraph(classDef: ClassDef, link: LinkToType): Seq[(LinkToType, LinkToType)] = {
-        val clsDf = classDef.symbol.tree.asInstanceOf[ClassDef]
-        val parents = hackGetParents(clsDf)
+        val smbl = classDef.symbol
+        val parents = if smbl.exists then hackGetParents(smbl.tree.asInstanceOf[ClassDef]) else None
         parents.fold(Seq())(_.flatMap { case tree =>
-            val superLink = LinkToType(tree.dokkaType.asSignature, tree.symbol.dri, kindForClasslike(tree.symbol))
+            val symbol = if tree.symbol.isClassConstructor then tree.symbol.owner else tree.symbol
+            val superLink = LinkToType(tree.dokkaType.asSignature, symbol.dri, kindForClasslike(symbol))
             Seq(link -> superLink) ++ getSupertypesGraph(tree.asInstanceOf[ClassDef], superLink)
           }       
         )
