@@ -39,7 +39,9 @@ object DotDiagramBuilder:
         span(style := "color: #FFFFFF;")(
             vertex.body.kind.name,
             " ",
-            span(style := "text-decoration: underline;")(
-                vertex.body.signature.map(renderer.renderElementWith(_, style := "color: #FFFFFF;"))
+            span(
+                vertex.body.signature.map(renderer.renderElementWith(_))
             )
         ).toString.replace("\"", "\\\"")
+// style := "text-decoration: underline;"
+// style := "color: #FFFFFF;"

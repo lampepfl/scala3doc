@@ -20,7 +20,7 @@ object HierarchyDiagramBuilder {
         ).toSeq
 
         val subtypesEdges = m.knownChildren.zipWithIndex.map { case (member, index) =>
-            Edge(Vertex(index + supertypesEdges.size, member), mainVertex)
+            Edge(Vertex(index + superTypesVertecies.size, member), mainVertex)
         }
 
         HierarchyDiagram(supertypesEdges ++ subtypesEdges)
