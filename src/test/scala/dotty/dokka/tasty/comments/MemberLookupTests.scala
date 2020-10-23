@@ -5,6 +5,8 @@ import scala.tasty.Reflection
 import org.junit.{Test, Rule}
 import org.junit.Assert.{assertSame, assertTrue}
 
+import dotty.dokka.TestUtils
+
 class LookupTestCases[R <: Reflection](val r: R) {
 
   def testAll(): Unit = {
@@ -121,7 +123,7 @@ class MemberLookupTests {
     import java.io.File
     import scala.collection.mutable.ListBuffer
 
-    val classRoot = File("target/scala-0.27/classes")
+    val classRoot = File(TestUtils.Scala3docClassRoot)
 
     def go(bld: ListBuffer[String])(file: File): Unit =
       file.listFiles.foreach { f =>
