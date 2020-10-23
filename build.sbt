@@ -37,9 +37,10 @@ lazy val root = project
     scalaVersion := dottyVersion
   )
 
-val generateSelfDocumentation = inputKey[Unit]("Generate example documentation")
-generateSelfDocumentation := {
-  run.in(Compile).fullInput(" -o output/self -t target/scala-0.27/classes -d documentation -n scala3doc -s src/main/scala=https://github.com/lampepfl/scala3doc/tree/master/src/main/scala#L").evaluated // TODO #35 proper sbt integration
+val generateSelfDocumentation = taskKey[Unit]("Generate example documentation")
+generateSelfDocumentation := Def.taskDyn {
+  val classroot = (Compile/target/classDirectory).value.getAbsolutePath.toString
+  run.in(Compile).toTask(s" -o output/self -t $classroot -d documentation -n scala3doc -s src/main/scala=https://github.com/lampepfl/scala3doc/tree/master/src/main/scala#L") // TODO #35 proper sbt integration
 }
 
 // Uncomment to debug dokka processing (require to run debug in listen mode on 5005 port)
@@ -47,8 +48,11 @@ generateSelfDocumentation := {
 
 fork.in(run) := true
 // There is a bug in dokka that prevents parallel tests withing the same jvm
-fork.in(test) := true
 Test / parallelExecution := false
+Test/fork := true
+Test/envVars := Map(
+  "scala3doc.classroot" -> (Compile/target/classDirectory).value.getAbsolutePath.toString,
+)
 
 scalacOptions in Compile += "-language:implicitConversions"
 
