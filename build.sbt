@@ -27,7 +27,6 @@ libraryDependencies ++= Seq(
 resolvers += Resolver.jcenterRepo
 resolvers += Resolver.bintrayRepo("kotlin", "kotlin-dev")
 resolvers += Resolver.bintrayRepo("virtuslab", "dokka")
-resolvers += Resolver.mavenLocal
 
 lazy val root = project
   .in(file("."))
