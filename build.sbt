@@ -41,7 +41,7 @@ val generateSelfDocumentation = taskKey[Unit]("Generate example documentation")
 generateSelfDocumentation := Def.taskDyn {
   val classroot = (Compile/target/classDirectory).value.getAbsolutePath.toString
   run.in(Compile).toTask(s" -o output/self -t $classroot -d documentation -n scala3doc -s src/main/scala=https://github.com/lampepfl/scala3doc/tree/master/src/main/scala#L") // TODO #35 proper sbt integration
-}
+}.value
 
 // Uncomment to debug dokka processing (require to run debug in listen mode on 5005 port)
 // javaOptions.in(run) += "-agentlib:jdwp=transport=dt_socket,server=n,address=localhost:5005,suspend=y"
