@@ -39,7 +39,7 @@ abstract class ScaladocTest(val name: String):
         case f if f.getName endsWith ".tasty" => f.getAbsolutePath :: Nil
         case _ => Nil
       }
-    collectFiles(File(s"target/scala-0.27/classes/tests/$name"))
+    collectFiles(File(s"target/scala-0.27/classes/$name"))
 
   @Test
   def executeTest = 
@@ -48,7 +48,7 @@ abstract class ScaladocTest(val name: String):
       TestLogger(DokkaConsoleLogger.INSTANCE),
       assertions.asTestMethods,
       Nil.asJava
-    )
+    ).generate()
 
 end ScaladocTest
 
@@ -57,7 +57,7 @@ end ScaladocTest
  */
 enum Assertion:
   case AfterPluginSetup(fn: DokkaContext => Unit)
-  // case DuringValidation(fn: (() => Unit) => Unit)  //Uncomment after updating dokka to 1.4.10.2
+  case DuringValidation(fn: (() => Unit) => Unit)  //Uncomment after updating dokka to 1.4.10.2
   case AfterDocumentablesCreation(fn: Seq[DModule] => Unit)
   case AfterPreMergeDocumentablesTransformation(fn: Seq[DModule] => Unit)
   case AfterDocumentablesMerge(fn: DModule => Unit)
@@ -71,7 +71,7 @@ extension (s: Seq[Assertion]):
     import Assertion._
     TestMethods(
       (context => s.collect { case AfterPluginSetup(fn) => fn(context) }.kUnit),
-      // (validator => s.collect { case DuringValidation(fn) => fn(() => validator) }.kUnit), //Uncomment after updating dokka to 1.4.10.2
+      (validator => s.collect { case DuringValidation(fn) => fn(() => validator) }.kUnit), //Uncomment after updating dokka to 1.4.10.2
       (modules => s.collect { case AfterDocumentablesCreation(fn) => fn(modules.asScala.toSeq) }.kUnit),
       (modules => s.collect { case AfterPreMergeDocumentablesTransformation(fn) => fn(modules.asScala.toSeq) }.kUnit),
       (module => s.collect { case AfterDocumentablesMerge(fn) => fn(module)}.kUnit),
