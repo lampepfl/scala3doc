@@ -10,13 +10,14 @@ import scalatags.Text.all._
 import dotty.dokka.model.api._
 
 object DotDiagramBuilder:
-    def build(diagram: HierarchyDiagram, renderer: SignatureRenderer): String = 
-        val vertecies = diagram.edges.flatMap(edge => Seq(edge.from, edge.to)).distinct.map { vertex =>
-            s"""node${vertex.id} [label="${getHtmlLabel(vertex, renderer)}", style="${getStyle(vertex)}"];\n"""
+    def build(diagram: HierarchyGraph, renderer: SignatureRenderer): String = 
+        val vWithId = diagram.verteciesWithId
+        val vertecies = vWithId.map { (vertex, id) =>
+            s"""node${id} [label="${getHtmlLabel(vertex, renderer)}", style="${getStyle(vertex)}"];\n"""
         }.mkString
 
-        val edges = diagram.edges.map { edge =>
-            s"""node${edge.from.id} -> node${edge.to.id};\n"""
+        val edges = diagram.edges.map { (from, to) =>
+            s"""node${vWithId(from)} -> node${vWithId(to)};\n"""
         }.mkString
 
         s""" digraph g {
@@ -27,7 +28,7 @@ object DotDiagramBuilder:
         |""".stripMargin
 
 
-    private def getStyle(vertex: Vertex) = vertex.body.kind match 
+    private def getStyle(vertex: LinkToType) = vertex.kind match 
         case Kind.Class => "fill: #45AD7D;"
         case Kind.Object => "fill: #285577;"
         case Kind.Trait => "fill: #1CAACF;"
@@ -35,11 +36,9 @@ object DotDiagramBuilder:
         case Kind.EnumCase => "fill: #B66722;"
         
 
-    private def getHtmlLabel(vertex: Vertex, renderer: SignatureRenderer): String =
+    private def getHtmlLabel(vertex: LinkToType, renderer: SignatureRenderer): String =
         span(style := "color: #FFFFFF;")(
-            vertex.body.kind.name,
+            vertex.kind.name,
             " ",
-            span(style := "text-decoration: underline;")(
-                vertex.body.signature.map(renderer.renderElementWith(_, style := "color: #FFFFFF;"))
-            )
+            vertex.signature.map(renderer.renderElementWith(_))
         ).toString.replace("\"", "\\\"")
