@@ -1,7 +1,7 @@
 package dotty.dokka
 
 import org.jetbrains.dokka.plugability.DokkaContext
-import org.jetbrains.dokka.model.DModule
+import org.jetbrains.dokka.model.{DModule, WithChildren}
 import org.jetbrains.dokka.pages.RootPageNode
 import org.jetbrains.dokka.testApi.testRunner.{DokkaTestGenerator, TestMethods}
 import org.jetbrains.dokka.testApi.logger.TestLogger
@@ -48,7 +48,7 @@ abstract class ScaladocTest(val name: String):
       TestLogger(DokkaConsoleLogger.INSTANCE),
       assertions.asTestMethods,
       Nil.asJava
-    )
+    ).generate()
 
 end ScaladocTest
 
@@ -57,7 +57,7 @@ end ScaladocTest
  */
 enum Assertion:
   case AfterPluginSetup(fn: DokkaContext => Unit)
-  // case DuringValidation(fn: (() => Unit) => Unit)  //Uncomment after updating dokka to 1.4.10.2
+  case DuringValidation(fn: (() => Unit) => Unit)
   case AfterDocumentablesCreation(fn: Seq[DModule] => Unit)
   case AfterPreMergeDocumentablesTransformation(fn: Seq[DModule] => Unit)
   case AfterDocumentablesMerge(fn: DModule => Unit)
@@ -71,7 +71,7 @@ extension (s: Seq[Assertion]):
     import Assertion._
     TestMethods(
       (context => s.collect { case AfterPluginSetup(fn) => fn(context) }.kUnit),
-      // (validator => s.collect { case DuringValidation(fn) => fn(() => validator) }.kUnit), //Uncomment after updating dokka to 1.4.10.2
+      (validator => s.collect { case DuringValidation(fn) => fn(() => validator) }.kUnit),
       (modules => s.collect { case AfterDocumentablesCreation(fn) => fn(modules.asScala.toSeq) }.kUnit),
       (modules => s.collect { case AfterPreMergeDocumentablesTransformation(fn) => fn(modules.asScala.toSeq) }.kUnit),
       (module => s.collect { case AfterDocumentablesMerge(fn) => fn(module)}.kUnit),

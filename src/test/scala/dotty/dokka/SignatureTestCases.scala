@@ -1,6 +1,6 @@
 package dotty.dokka
 
-class GenericSignatures extends SingleFileTest("genericSignatures", Seq("class"))
+class GenericSignatures extends SignatureTest("genericSignatures", Seq("class"))
 
 class ObjectSignatures extends SingleFileTest("objectSignatures", Seq("object"))
 

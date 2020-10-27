@@ -8,7 +8,7 @@ class D2[T]()
 
 class DD[+T] 
 
-class A
+class A //unexpected
 
 class E[T] extends D[T]
 
