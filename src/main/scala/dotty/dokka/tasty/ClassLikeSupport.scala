@@ -80,12 +80,12 @@ trait ClassLikeSupport:
   private val conversionSymbol = Symbol.requiredClass("scala.Conversion")
 
   def extractImplicitConversion(tpe: Type): Option[ImplicitConversion] =
-      if tpe.derivesFrom(conversionSymbol) then None
-      else tpe.baseType(conversionSymbol) match
+      if tpe.derivesFrom(conversionSymbol) then tpe.baseType(conversionSymbol) match
         case AppliedType(tpe, List(from: Type, to: Type)) =>
-          Some(ImplicitConversion(from.typeSymbol.dri, to.typeSymbol.dri))
+          Some(ImplicitConversion(from.typeSymbol.dri, to.typeSymbol.dri, from.dokkaType.asSignature, to.dokkaType.asSignature))
         case _ =>
           None
+      else None
 
   private def parseMember(s: Tree): Option[Member] = processTreeOpt(s)(s match 
       case dd: DefDef if !dd.symbol.isHiddenByVisibility && !dd.symbol.isSyntheticFunc && dd.symbol.isExtensionMethod =>
@@ -205,11 +205,22 @@ trait ClassLikeSupport:
 
     val methodKind = 
       if methodSymbol.isClassConstructor then Kind.Constructor 
-      else if methodSymbol.flags.is(Flags.Implicit) then extractImplicitConversion(method.returnTpt.tpe) match
-        case Some(conversion) if paramLists.size == 0 || (paramLists.size == 1 && paramLists.head.size == 0) => 
-          Kind.Implicit(Kind.Def, Some(conversion))
-        case _ => 
-          Kind.Implicit(Kind.Def, None)
+      else if methodSymbol.flags.is(Flags.Implicit) then
+        if paramLists.size == 0 || (paramLists.size == 1 && paramLists.head.size == 0) then extractImplicitConversion(method.returnTpt.tpe) match
+          case Some(conversion) if paramLists.size == 0 || (paramLists.size == 1 && paramLists.head.size == 0) => 
+            Kind.Implicit(Kind.Def, Some(conversion))
+          case _ => 
+            Kind.Implicit(Kind.Def, None)
+        else if paramLists.size == 1 && paramLists.head.size == 1 
+          then Kind.Implicit(Kind.Def, Some(
+            ImplicitConversion(
+              paramLists(0)(0).tpt.tpe.typeSymbol.dri, 
+              method.returnTpt.tpe.typeSymbol.dri,
+              paramLists(0)(0).tpt.tpe.dokkaType.asSignature,
+              method.returnTpt.tpe.dokkaType.asSignature
+            )
+          ))
+        else Kind.Implicit(Kind.Def, None)
       else kind
     
     val name = methodKind match

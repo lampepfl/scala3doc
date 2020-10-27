@@ -50,3 +50,5 @@ class OpaqueTypes extends SingleFileTest("opaqueTypes", SingleFileTest.all)
 // class GivenSignatures extends SingleFileTest("givenSignatures", SingleFileTest.all)
 
 class Annotations extends SingleFileTest("annotations", SingleFileTest.all)
+
+class ImplicitConversions extends MultipleFileTest(List("implicitConversions/A"), List("implicitConversions"), SingleFileTest.all)

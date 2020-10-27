@@ -52,7 +52,7 @@ enum Modifier(val name: String, val prefix: Boolean):
   case Open extends Modifier("open", true)
 
 case class ExtensionTarget(name: String, signature: Signature, dri: DRI)
-case class ImplicitConversion(from: DRI, to: DRI)
+case class ImplicitConversion(from: DRI, to: DRI, fromType: Signature, toType: Signature)
 trait ImplicitConversionProvider { def conversion: Option[ImplicitConversion] }
 trait Classlike
 
@@ -75,7 +75,12 @@ enum Kind(val name: String){
 
 enum Origin:
   case InheritedFrom(name: String, dri: DRI)
-  case ImplicitlyAddedBy(name: String, dri: DRI)
+  case ImplicitlyAddedBy(
+    conversionName: String, 
+    conversionDri: DRI, 
+    convertedFrom: Signature,
+    conversionTarget: Signature
+  )
   case ExtensionFrom(name: String, dri: DRI)
   case DefinedWithin
 
@@ -93,6 +98,7 @@ type Signature = Seq[String | Link]// TODO migrate tupes to Links
 
 object Signature:
   def apply(names: (String | Link)*): Signature = names // TO batter dotty shortcommings in union types
+  def merge(signatures: Signature*): Signature = signatures.flatten
 
 extension (s: Signature):
   def join(a: Signature): Signature = s ++ a

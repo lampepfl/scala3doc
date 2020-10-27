@@ -19,23 +19,33 @@ class ImplicitMembersExtensionTransformer(ctx: DokkaContext) extends Documentabl
             val companion = c match 
                 case classlike: DClass => ClasslikeExtension.getFrom(classlike).flatMap(_.companion).map(classlikeMap)
                 case _ => None
-            
-            val implictSources = outerMembers ++ companion.toSeq // We can expand this on companion object from parents, generic etc.
 
-            val MyDri = c.getDri
+            val allParents = c.parents.flatMap { p => 
+                classlikeMap.get(p.dri)
+            }
+
+            val parentCompanions = allParents.flatMap { _ match
+                    case cls: DClasslike => ClasslikeExtension.getFrom(cls).flatMap(_.companion).map(classlikeMap)
+                    case _ => None
+            }     
+
+            val implictSources = outerMembers ++ companion.toSeq ++ parentCompanions // We can expand this on generic etc.
+
+            val applicableDRIs = c.parents.map(_.dri).toSet + c.dri
+
             def collectApplicableMembers(source: Member): Seq[Member] = source.allMembers.flatMap {
-                case m @ Member(_, _, _, Kind.Extension(ExtensionTarget(_, _, MyDri)), Origin.DefinedWithin) => 
+                case m @ Member(_, _, _, Kind.Extension(ExtensionTarget(_, _, to)), Origin.DefinedWithin) if applicableDRIs.contains(to) => 
                     Seq(m.withOrigin(Origin.ExtensionFrom(source.name, source.dri)).withKind(Kind.Def))
                 case m @ Member(_, _, _, conversionProvider: ImplicitConversionProvider, Origin.DefinedWithin) =>
                     conversionProvider.conversion match 
-                        case Some(ImplicitConversion(MyDri, to)) =>
+                        case Some(ImplicitConversion(from, to, fromType, toType)) if applicableDRIs.contains(from) =>
                             classlikeMap.get(to).toSeq.flatMap { owner =>
                                 val newMembers = owner.allMembers.filter(_.origin match
                                     case Origin.DefinedWithin => true
                                     case Origin.InheritedFrom(_, _) => true
                                     case _ => false
                                 )
-                                newMembers.map(_.withOrigin(Origin.ImplicitlyAddedBy(owner.name, owner.dri)))
+                                newMembers.map(_.withOrigin(Origin.ImplicitlyAddedBy(m.name, m.dri, fromType, toType)))
                             } 
                         case _ =>
                             Nil

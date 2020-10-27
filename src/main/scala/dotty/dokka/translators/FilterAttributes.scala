@@ -42,7 +42,7 @@ object FilterAttributes:
     case v: Member => 
       v.origin match
         case Origin.InheritedFrom(name, _) => Map("inherited" -> name)
-        case Origin.ImplicitlyAddedBy(name, _) => Map("implicitly" -> s"by $name")
+        case Origin.ImplicitlyAddedBy(convName, _, _, _) => Map("implicitly" -> s"by $convName")
         case Origin.ExtensionFrom(name, _) => Map("extension" -> s"from $name")
         case _ => Map.empty
     case _ =>
