@@ -242,6 +242,7 @@ class ScalaHtmlRenderer(ctx: DokkaContext) extends SiteRenderer(ctx) {
                         div(
                             id := "leftColumn",
                             div(id := "logo"),
+                            div(id := "paneSearch"),
                             nav(id := "sideMenu"),
                         ),
                         div(
