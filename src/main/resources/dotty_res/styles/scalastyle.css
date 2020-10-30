@@ -211,35 +211,34 @@ th {
 
 /* Search */
 .search-content {
-  /* TODO override search style without !important */
-  padding: 0 !important;
-	margin: var(--content-padding) !important;
-	position: absolute !important;
-	top: 0 !important;
-	right: 0 !important;
-	z-index: 5 !important;
-	background: none !important;
+  padding: 0;
+	margin: var(--content-padding);
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 5;
+	background: none;
 }
 .search button {
-  background: none !important;
-  fill: var(--icon-color) !important;
-  cursor: pointer !important;
+  background: none;
+  fill: var(--icon-color);
+  cursor: pointer;
+  border: none;
+  padding: 0;
 }
 .search button:hover {
-  fill: var(--link-hover-fg) !important;
+  fill: var(--link-hover-fg);
 }
 .search button svg {
-  width: 24px !important;
-  height: 24px !important;
+  width: 24px;
+  height: 24px;
 }
 .popup-wrapper { /* search popup */
   box-shadow: 0 0 10px var(--border-light) !important;
   border: 2px solid var(--border-light) !important;
   font-family: var(--mono-font) !important;
-  /* TODO dokka already uses !important so I can't override that...
-  min-width: calc(100% - var(--side-width) - 36px) !important;
-  left: 24px;
-  */
+  width: calc(100% - var(--side-width) - 84px);
+  left: calc(var(--side-width) + 42px) !important;
 }
 .popup-wrapper .indented {
   text-indent: 1.5em !important;
@@ -527,6 +526,11 @@ footer .pull-right {
   footer > span:last-child {
     margin-right: 12px;
   }
+
+  .popup-wrapper {
+    width: calc(100% - 48px);
+    left: 24px !important;
+  }
 }
 /* Portrait phones */
 @media(max-width: 576px) {
@@ -573,6 +577,19 @@ footer .pull-right {
     top: 9px !important;
     right: 12px !important;
   }
+  .popup-wrapper {
+    width: calc(100% - 8px);
+    left: 8px;
+  }
+  /* Allow to scroll horizontally in the search results */
+  .popup-wrapper div.ReactVirtualized__Grid__innerScrollContainer {
+    overflow: auto;
+  }
+  .popup-wrapper div.ReactVirtualized__Grid__innerScrollContainer div {
+    min-width: 100%;
+    width: auto !important;
+  }
+
   .cover h1 {
     margin-top: 0;
   }
