@@ -62,14 +62,15 @@
     right: 12px !important;
   }
   .popup-wrapper {
-    width: calc(100% - 8px);
-    left: 8px;
+    width: 100%;
+    left: 0 !important;
+    top: 36px !important;
   }
   /* Allow to scroll horizontally in the search results, which is useful on small screens */
   .popup-wrapper div.ReactVirtualized__Grid__innerScrollContainer {
-    overflow: auto;
+    overflow: auto !important;
   }
-  .popup-wrapper div.ReactVirtualized__Grid__innerScrollContainer div {
+  .popup-wrapper div.ReactVirtualized__Grid__innerScrollContainer > div {
     min-width: 100%;
     width: auto !important;
   }
