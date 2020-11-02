@@ -155,13 +155,13 @@ th {
   overflow-wrap: anywhere;
   color: var(--leftbar-fg);
   margin-right: .5rem;
+  padding: 7px 0;
 }
 .sideMenuPart > .overview {
   display: flex;
   align-items: center;
   position: relative;
   user-select: none;
-  padding: 7px 0;
 }
 .sideMenuPart > .overview::before {
   width: var(--side-width);
@@ -198,7 +198,7 @@ th {
   align-items: center;
   display: flex;
   justify-content: flex-end;
-  padding-right: 1rem;
+  padding: 7px 10px;
   cursor: pointer;
 }
 .sideMenuPart .navButtonContent::before {
@@ -216,7 +216,7 @@ th {
 .sideMenuPart.hidden .navButtonContent::before {
   content: "\e903"; /* arrow down */
 }
-.sideMenuPart .navButtonContent:hover::before {
+.sideMenuPart .navButton:hover .navButtonContent::before {
   color: var(--leftbar-current-bg);
 }
 
@@ -379,9 +379,9 @@ dl.paramsdesc dd {
   padding-left: 3em;
 }
 
-/* Workaround for dynamically rendered content inside hidden tab. 
+/* Workaround for dynamically rendered content inside hidden tab.
 There's some limitation of css/html that causes wrong width/height property of elements that are rendered dynamically inside element with display:none;
-Same solution is already used in Dokka. 
+Same solution is already used in Dokka.
 */
 .platform-hinted[data-togglable="Type hierarchy"] > .content:not([data-active]),
 .tabs-section-body > *[data-togglable="Type hierarchy"]:not([data-active]) {
