@@ -20,16 +20,15 @@ class ImplicitMembersExtensionTransformer(ctx: DokkaContext) extends Documentabl
                 case classlike: DClass => ClasslikeExtension.getFrom(classlike).flatMap(_.companion).map(classlikeMap)
                 case _ => None
 
-            val allParents = c.parents.flatMap { p => 
-                classlikeMap.get(p.dri)
-            }
+            val allParents = c.parents.flatMap(p => classlikeMap.get(p.dri))
 
-            val parentCompanions = allParents.flatMap { _ match
+            val parentCompanions = allParents.flatMap {
                     case cls: DClasslike => ClasslikeExtension.getFrom(cls).flatMap(_.companion).map(classlikeMap)
                     case _ => None
             }     
 
-            val implictSources = outerMembers ++ companion.toSeq ++ parentCompanions // We can expand this on generic etc.
+            // TODO (#220): We can expand this on generic etc
+            val implictSources = outerMembers ++ companion.toSeq ++ parentCompanions 
 
             val applicableDRIs = c.parents.map(_.dri).toSet + c.dri
 
